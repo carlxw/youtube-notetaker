@@ -14,4 +14,6 @@ class Markdown {
 
         return downloadLink;
     }
+
+    // https://stackoverflow.com/questions/8608724/how-to-zip-files-using-javascript
 }
