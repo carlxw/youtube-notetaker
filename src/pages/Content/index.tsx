@@ -1,59 +1,35 @@
-const printLine = require("./modules/print")
+const { printLine } = require("./modules/print");
+const YouTubeVideo = require("./modules/YouTubeVideo");
 
-console.log('Content script works! You are on a YouTube page!');
+const msg = (
+    "=====================================\n\n"     +
+    "YouTube Notetaker\n"                           + 
+    `${window.location.href}\n`                     +
+    `${document.title.split(" - YouTube")[0]}\n\n`  +
+    "====================================="
+)
+
+console.log('Content script works! You are on a YouTube video page!');
 console.log('Must reload extension for modifications to take effect.');
+console.log(msg);
 
-printLine("Using the 'printLine' function from the Print Module");
+const yt = new YouTubeVideo(document.getElementsByTagName("video")[0]);
 
-/*
-const video = document.getElementsByTagName("video")[0];
-
-class YouTubeVideo {
-    video;
-    constructor(video) {
-        this.video = video;
-    }
-
-    play() {
-        if (this.video) this.video.play();
-    }
-    
-    pause() {
-        if (this.video) this.video.pause();
-    }
-    
-    getVideoTitle() {
-        return document.title.split(" - YouTube")[0];
-    }
-    
-    getCurrentTime() {
-        return document.getElementsByTagName('video')[0].currentTime;
-    }
-
-    isPaused() {
-        return video.paused;
-    }
-
-    createLink() {
-        return `${ window.location.href }&t=${ this.getCurrentTime() }`
-    }
-}
-
-const yt = new YouTubeVideo(video);
-console.dir(video);
+printLine("Pausing video in 5 seconds")
 setTimeout(() => {
     yt.pause();
-    console.log(yt.getVideoTitle());
-    console.log(yt.getCurrentTime());
+    console.log(yt.title);
+    console.log(yt.isPaused());
+    console.log(yt.url);
 }, 5000);
 
-class ClipboardImage {
-    async isImage(): Promise<boolean> {
-        let imgdata:string = await navigator.clipboard.read()[0].types;
-        return imgdata.indexOf("image") === -1 ? false : true;
-    }
+// class ClipboardImage {
+//     async isImage(): Promise<boolean> {
+//         let imgdata:string = await navigator.clipboard.read()[0].types;
+//         return imgdata.indexOf("image") === -1 ? false : true;
+//     }
 
-    // Paste the image
-    // https://jsfiddle.net/bt7BU/225/
-}
-*/
+//     // Paste the image
+//     // https://jsfiddle.net/bt7BU/225/
+// }
+
