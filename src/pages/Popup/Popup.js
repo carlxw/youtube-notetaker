@@ -21,32 +21,43 @@ const Popup = () => {
 	});
 
 	// Functionality to send messages to tabs
-	function sendMessage(tab, message) {
+	function sendMessage(tab, message, callback) {
 		if (chrome.runtime.lastError) {
 			console.error(`Youtube Autopause error: ${chrome.runtime.lastError}`);
+			callback(null, `Error: ${chrome.runtime.lastError}`);
 			return;
 		}
 
 		chrome.tabs.sendMessage(tab.id, message, {}, function (res) {
 			void chrome.runtime.lastError;
 			if (res) {
-				console.log(res)
-				return res;
+				console.log(res);
+				callback(res, null);
+			} else {
+				callback(null, "No response received from the tab.");
 			}
 		});
 	}
 
 	function resume(tab) {
-		sendMessage(tab, { action: "play" });
+		return sendMessage(tab, { action: "play" });
 	}
 
 	function pause(tab) {
-		sendMessage(tab, { action: "pause" });
+		return sendMessage(tab, { action: "pause" });
 	}
 
-	function test(tab) {
-		sendMessage(tab, { action: "mute" })
+	function test(tab, callback) {
+		sendMessage(tab, { action: "mute" }, function (response, error) {
+			if (error) {
+				console.error(error);
+			} else {
+				console.log(`Response from sendMessage: ${response}`);
+				callback(response);
+			}
+		});
 	}
+	
 
 	return (
 		<div className="App">
@@ -70,9 +81,11 @@ const Popup = () => {
 					pause(activeTab);
 				}}>Pause the video</button>
 				<button onClick={() => {
-					let msg = test(activeTab);
-					console.log(`From the button: ${msg}`)
+					test(activeTab, function (msg) {
+						console.log(`From the button: ${msg}`);
+					});
 				}}>Test</button>
+
 			</header>
 		</div>
 	);
