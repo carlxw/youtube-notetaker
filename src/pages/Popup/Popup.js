@@ -15,8 +15,25 @@ const Popup = () => {
     });
   }, []);
 
+  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    if (message.action === 'test') {
+      console.log("Sent mute, returned here in test");
+      let time = sessionStorage.getItem("video_current_time");
+      console.log(`Current, the video only ran for ${ time } seconds`)
+    }
+    return true;
+  });
+
   function resume(tab) {
-    sendMessage(tab, { action: "resume" });
+    sendMessage(tab, { action: "play" });
+  }
+
+  function pause(tab) {
+    sendMessage(tab, { action: "pause" });
+  }
+
+  function test(tab) {
+    sendMessage(tab, { action: "mute" })
   }
 
   // Functionality to send messages to tabs
@@ -26,7 +43,8 @@ const Popup = () => {
       return;
     }
 
-    chrome.tabs.sendMessage(tab.id, message, {}, function () {
+    chrome.tabs.sendMessage(tab.id, message, {}, function (res) {
+      if (res) console.log(res)
       void chrome.runtime.lastError;
     });
   }
@@ -48,8 +66,13 @@ const Popup = () => {
         </a>
         <button onClick={() => {
           resume(activeTab);
-          console.log(activeTab)
-        }}>Click me!</button>
+        }}>Play the video</button>
+        <button onClick={() => {
+          pause(activeTab);
+        }}>Pause the video</button>
+        <button onClick={() => {
+          test(activeTab);
+        }}>Test</button>
       </header>
     </div>
   );

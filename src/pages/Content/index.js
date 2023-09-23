@@ -13,11 +13,6 @@ console.log(msg);
 const video = document.getElementsByTagName("video")[0];
 console.log(video);
 
-setTimeout(() => {
-    video.pause();
-    console.log("Video is paused")
-},  5000)
-console.log(1);
 // class ClipboardImage {
 //     async isImage(): Promise<boolean> {
 //         let imgdata:string = await navigator.clipboard.read()[0].types;
@@ -28,7 +23,6 @@ console.log(1);
 //     // https://jsfiddle.net/bt7BU/225/
 // }
 
-// Listen media commands from the service worker
 chrome.runtime.onMessage.addListener(async function (
     request,
     sender,
@@ -39,14 +33,17 @@ chrome.runtime.onMessage.addListener(async function (
     }
     const videoElements = document.querySelectorAll("video");
 
-    if (request.action === "stop") {
+    if (request.action === "pause") {
         video.pause();
-    } else if (request.action === "resume" && video.paused) {
+    } else if (request.action === "play" && video.paused) {
         await video.play();
     } else if (request.action === "toggle_mute") {
         video.muted = !video.muted;
     } else if (request.action === "mute") {
-        video.muted = true;
+        // video.muted = true;
+        sessionStorage.setItem("video_current_time", video.currentTime);
+        chrome.runtime.sendMessage({ action: "test"});
+        sendResponse(video.currentTime);
     } else if (request.action === "unmute") {
         video.muted = false;
     } else if (request.action === "toggle") {
