@@ -40,15 +40,27 @@ class Markdown {
     }
 
     arrayOutput(): string {
-        let output = "";
+        let output = `# [${ this.ytTitle }](${ this.yturl })\n`;
         this.mdcontent.forEach((x) => {
-            output += `# [${ x.title }](${ this.yturl }&t=${ x.timeStamp }s)\n${ x.content }\n`;
+            output += `## [${ x.title } [${ this._secondsToTimeString(x.timeStamp) }]](${ this.yturl }&t=${ x.timeStamp }s)\n${ x.content }\n`;
         });
         return output;
     }
 
-    append(title: string, content: string): void {
-        this.mdcontent.push(new MdEntry(this.mdcontent.length, title, content, 152));
+    _secondsToTimeString(x: number) {
+        const hours = Math.floor(x / 3600);
+        const minutes = Math.floor((x % 3600) / 60);
+        const seconds = x % 60;
+    
+        if (hours > 0) {
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        } else {
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+    }
+
+    append(title: string, content: string, timeStamp: number): void {
+        this.mdcontent.push(new MdEntry(this.mdcontent.length, title, content, timeStamp));
     }
 
     removeTitle(title: string): void {

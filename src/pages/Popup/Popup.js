@@ -10,43 +10,45 @@ const Popup = () => {
 	const [videoTitle, setVideoTitle] = useState("");
 	const [timeStamp, setTimeStamp] = useState(0);
 
-	// Get the tab that the user is currently on
+	// const [entry, setEntry] = useState("");
+
+	// Get the tab that the user is currently on, to run once
 	useEffect(() => {
 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 			let currentTab = tabs[0];
 			if (tabs.length > 0) {
+				setCurrentURL(currentTab.url.includes("&t=") ? currentTab.url.split("&t=")[0] : currentTab.url);
 				setActiveTab(currentTab);
-				setCurrentURL(currentTab.url);
 				setVideoTitle(getVideoTitle(currentTab.title));
 			}
 		});
 	}, []);
 
-	// // Communication from the content script
-	// chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-	// 	if (message.action === 'test') {
-	// 		console.log("Sent mute, returned here in test");
-	// 	}
-	// 	return true;
-	// });
-
-	function resume(tab) {
-		return sendMessage(tab, { action: "play" });
-	}
-
-	function pause(tab) {
-		return sendMessage(tab, { action: "pause" });
+	function toggle(tab) {
+		return sendMessage(tab, { action: "toggle" });
 	}
 
 	function getCurrentTime(tab) {
-		sendMessage(tab, { action: "currentTime" }, function (response, error) {
+		sendMessage(tab, { action: "currentTime" }, function (res, error) {
 			if (error) {
 				console.error(error);
 			} else {
 				// Obtain the current time as a response
-				setTimeStamp(response);
+				setTimeStamp(res);
 			}
 		});
+	}
+
+	function test() {
+		getCurrentTime(activeTab);
+		console.log(timeStamp)
+		setTimeout(() => {
+			if (timeStamp !== 0) {
+				const md = new Markdown(videoTitle, currentURL);
+				md.append("Sample header title for markdown", "* This is a test content at this current time", timeStamp);
+				md.createBlob();
+			} else throw ("Please try again")
+		}, 500);
 	}
 
 	return ( 
@@ -66,19 +68,22 @@ const Popup = () => {
 					Learn React!
 				</a>
 				<button onClick={() => {
-					resume(activeTab);
-				}}>Play the video</button>
+					toggle(activeTab);
+				}}>Toggle</button>
 				<button onClick={() => {
-					pause(activeTab);
-				}}>Pause the video</button>
-				<button onClick={() => {
-					getCurrentTime(activeTab);
-					console.log(timeStamp);
+					test()
 				}}>Test</button>
-
 			</header>
 		</div>
 	);
 };
 
 export default Popup;
+
+// // Communication from the content script
+// chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+// 	if (message.action === 'test') {
+// 		console.log("Sent mute, returned here in test");
+// 	}
+// 	return true;
+// });
