@@ -28,8 +28,11 @@ const Popup = () => {
 		}
 
 		chrome.tabs.sendMessage(tab.id, message, {}, function (res) {
-			if (res) console.log(res)
 			void chrome.runtime.lastError;
+			if (res) {
+				console.log(res)
+				return res;
+			}
 		});
 	}
 
@@ -67,7 +70,8 @@ const Popup = () => {
 					pause(activeTab);
 				}}>Pause the video</button>
 				<button onClick={() => {
-					test(activeTab);
+					let msg = test(activeTab);
+					console.log(`From the button: ${msg}`)
 				}}>Test</button>
 			</header>
 		</div>
