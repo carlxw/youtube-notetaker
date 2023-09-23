@@ -40,6 +40,7 @@ class Markdown {
     }
 
     arrayOutput(): string {
+        // Maybe make the H1 take the user to when time is 0 seconds?
         let output = `# [${ this.ytTitle }](${ this.yturl })\n`;
         this.mdcontent.forEach((x) => {
             output += `## [[${ this._secondsToTimeString(x.timeStamp) }]](${ this.yturl }&t=${ x.timeStamp }s) ${ x.title }\n${ x.content }\n`;

@@ -9,24 +9,31 @@ console.log(
 const video = document.getElementsByTagName("video")[0];
 console.log(video);
 
-chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (!("action" in request)) return false;
 
     if (request.action === "pause") video.pause();
     
-    else if (request.action === "play" && video.paused) await video.play();
+    else if (request.action === "play" && video.paused) video.play();
     
     else if (request.action === "toggle_mute") video.muted = !video.muted;
     
     else if (request.action === "currentTime") {
-        sendResponse(Math.floor(video.currentTime));
-        console.log(Math.floor(video.currentTime));
+        try {
+            sendResponse(Math.floor(video.currentTime));
+        } catch {
+            console.error("Response failed");
+        }
     }
         
     else if (request.action === "unmute") video.muted = false;
     
-    else if (request.action === "toggle") video.paused ? await video.play() : video.pause();
+    else if (request.action === "toggle") video.paused ? video.play() : video.pause();
 
-    sendResponse({});
+    try {
+        sendResponse("Success");
+    } catch {
+        console.error("Response failed");
+    }
     return true;
 });

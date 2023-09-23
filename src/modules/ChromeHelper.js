@@ -10,7 +10,7 @@ export function sendMessage(tab, message, callback) {
     }
 
     chrome.tabs.sendMessage(tab.id, message, {}, function (res) {
-        void chrome.runtime.lastError;
+        // void chrome.runtime.lastError;
         if (res) {
             // console.log(res);
             callback(res, null);
