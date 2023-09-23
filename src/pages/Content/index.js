@@ -17,10 +17,8 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     
     else if (request.action === "toggle_mute") video.muted = !video.muted;
     
-    else if (request.action === "mute") {
-        // video.muted = true;
-
-        chrome.runtime.sendMessage({ action: "test"});
+    else if (request.action === "currentTime") {
+        // chrome.runtime.sendMessage({ action: "test"});
         sendResponse(video.currentTime);
     } 
     

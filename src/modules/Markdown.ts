@@ -73,3 +73,5 @@ class Markdown {
 
     // https://stackoverflow.com/questions/8608724/how-to-zip-files-using-javascript
 }
+
+export default Markdown;
