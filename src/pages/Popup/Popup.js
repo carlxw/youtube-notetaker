@@ -17,19 +17,19 @@ const Popup = () => {
 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 			let currentTab = tabs[0];
 			if (tabs.length > 0) {
-				setCurrentURL(currentTab.url.includes("&t=") ? currentTab.url.split("&t=")[0] : currentTab.url);
 				setActiveTab(currentTab);
+				setCurrentURL(currentTab.url.includes("&t=") ? currentTab.url.split("&t=")[0] : currentTab.url);
 				setVideoTitle(getVideoTitle(currentTab.title));
 			}
 		});
 	}, []);
 
 	function toggle(tab) {
-		return sendMessage(tab, { action: "toggle" });
+		return sendMessage(tab, { action: "toggle" }, (res, err) => {});
 	}
 
 	function getCurrentTime(tab) {
-		sendMessage(tab, { action: "currentTime" }, function (res, error) {
+		sendMessage(tab, { action: "currentTime" }, (res, error) => {
 			if (error) {
 				console.error(error);
 			} else {
@@ -42,15 +42,14 @@ const Popup = () => {
 	function test() {
 		getCurrentTime(activeTab);
 		console.log(timeStamp)
-		setTimeout(() => {
-			if (timeStamp !== 0) {
-				const md = new Markdown(videoTitle, currentURL);
-				md.append("Sample header title for markdown", "* This is a test content at this current time", timeStamp);
-				md.createBlob();
-			} else throw ("Please try again")
-		}, 500);
-	}
-
+	} useEffect(() => {
+		if (timeStamp !== 0) {
+			const md = new Markdown(videoTitle, currentURL);
+			md.append("Sample header title for markdown", "* This is a test content at this current time", timeStamp);
+			md.createBlob();
+		}
+	}, [timeStamp]);
+	
 	return ( 
 		<div className="App">
 			<header className="App-header">
@@ -58,7 +57,6 @@ const Popup = () => {
 				<p>
 					Edit <code>src/pages/Popup/Popup.jsx</code> and save to reload.
 				</p>
-				{ currentURL.indexOf("www.youtube.com") !== 1 && videoTitle }
 				<a
 					className="App-link"
 					href="https://reactjs.org"

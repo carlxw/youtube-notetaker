@@ -42,7 +42,7 @@ class Markdown {
     arrayOutput(): string {
         let output = `# [${ this.ytTitle }](${ this.yturl })\n`;
         this.mdcontent.forEach((x) => {
-            output += `## [${ x.title } [${ this._secondsToTimeString(x.timeStamp) }]](${ this.yturl }&t=${ x.timeStamp }s)\n${ x.content }\n`;
+            output += `## [[${ this._secondsToTimeString(x.timeStamp) }]](${ this.yturl }&t=${ x.timeStamp }s) ${ x.title }\n${ x.content }\n`;
         });
         return output;
     }
