@@ -5,6 +5,7 @@ import Markdown from "../../modules/Markdown";
 import { getVideoTitle, sendMessage } from "../../modules/ChromeHelper";
 
 const Popup = () => {
+	const [md, setmd] = useState(null);
 	const [activeTab, setActiveTab] = useState(null);
 	const [currentURL, setCurrentURL] = useState("");
 	const [videoTitle, setVideoTitle] = useState("");
@@ -25,6 +26,11 @@ const Popup = () => {
 		});
 	}, []);
 
+	// When a tab has been identified
+	useEffect(() => {
+		setmd(new Markdown(videoTitle, currentURL));
+	}, [activeTab])
+
 	function toggle(tab) {
 		return sendMessage(tab, { action: "toggle" }, (res, err) => {});
 	}
@@ -41,8 +47,7 @@ const Popup = () => {
 	}
 
 	function test() {
-		getCurrentTime(activeTab);
-		console.log(timeStamp)
+		md.createBlob();
 	}
 
 	function handleSubmit(e) {
@@ -51,9 +56,7 @@ const Popup = () => {
 		console.log(timeStamp)
 	} useEffect(() => {
 		if (timeStamp !== 0) {
-			const md = new Markdown(videoTitle, currentURL);
 			md.append(entryTitle, entryBody, timeStamp);
-			md.createBlob();
 		}
 	}, [timeStamp]);
 	
