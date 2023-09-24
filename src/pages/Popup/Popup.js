@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import logo from '../../assets/img/logo.svg';
-import './Popup.css';
+import React, { useEffect, useState } from "react";
+import TextField from "./Components/TextField";
+import logo from "../../assets/img/logo.svg";
+import "./Popup.css";
 import Markdown from "../../modules/Markdown";
 import { getVideoTitle, sendMessage } from "../../modules/ChromeHelper";
 
@@ -80,17 +81,11 @@ const Popup = () => {
 					md.createBlob();
 				}}>Download</button>
 
-				<form onSubmit={ handleSubmit }>
-					<input
-						value={entryTitle}
-						onChange={(e) => setEntryTitle(e.target.value)}
-					/>
-					<textarea 
-						value={entryBody} 
-						onChange={(e) => setEntryBody(e.target.value)}>
-					</textarea>
-					<input type="submit" />
-				</form>
+				<TextField 
+					handleSubmit={ handleSubmit }
+					title={{ value: entryTitle, set: setEntryTitle }}
+					body={{ value: entryBody, set: setEntryBody }}
+				/>
 			</header>
 		</div>
 	);
