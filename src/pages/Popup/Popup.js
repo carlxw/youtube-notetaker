@@ -8,8 +8,6 @@ import { getVideoTitle, sendMessage } from "../../modules/ChromeHelper";
 const Popup = () => {
 	const [md, setmd] = useState(null);
 	const [activeTab, setActiveTab] = useState(null);
-	const [currentURL, setCurrentURL] = useState("");
-	const [videoTitle, setVideoTitle] = useState("");
 	const [timeStamp, setTimeStamp] = useState(0);
 
 	const [entryTitle, setEntryTitle] = useState("");
@@ -24,14 +22,12 @@ const Popup = () => {
 				let url = currentTab.url.includes("&t=") ? currentTab.url.split("&t=")[0] : currentTab.url;
 				let title = getVideoTitle(currentTab.title);
 				setActiveTab(currentTab);
-				setCurrentURL(url);
-				setVideoTitle(title);
 
 				// Deal with MD content
 				const serializedData = localStorage.getItem("ytmd");
 				if (serializedData) {
 					// Deserialize the data
-					console.log("Getting data from local storage")
+					console.log("Restoring from previous session...");
 					const parsedData = JSON.parse(serializedData);
 		
 					// Create a new instance of the Markdown class
@@ -42,7 +38,10 @@ const Popup = () => {
 					setmd(storedmd);
 					localStorage.clear();
 				}
-				else setmd(new Markdown(title, url));
+				else {
+					console.log("New Markdown session has been created");
+					setmd(new Markdown(title, url));
+				}
 			}
 		});
 	}, []);
@@ -65,7 +64,6 @@ const Popup = () => {
 	function handleSubmit(e) {
 		e.preventDefault();
 		getCurrentTime(activeTab);
-		console.log(timeStamp)
 	} useEffect(() => {
 		if (timeStamp !== 0) {
 			md.append(entryTitle, entryBody, timeStamp);
@@ -79,8 +77,7 @@ const Popup = () => {
 				mdcontent: md.mdcontent
 			};
 
-			localStorage.clear();
-			console.log("Setting data to local storage")
+			console.log("Setting data to local storage");
 			localStorage.setItem("ytmd", JSON.stringify(serializedData));
 		}
 	}, [timeStamp]);
@@ -131,11 +128,3 @@ const Popup = () => {
 };
 
 export default Popup;
-
-// // Communication from the content script
-// chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-// 	if (message.action === 'test') {
-// 		console.log("Sent mute, returned here in test");
-// 	}
-// 	return true;
-// });
