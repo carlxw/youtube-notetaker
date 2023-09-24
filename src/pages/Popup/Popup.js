@@ -10,7 +10,8 @@ const Popup = () => {
 	const [videoTitle, setVideoTitle] = useState("");
 	const [timeStamp, setTimeStamp] = useState(0);
 
-	// const [entry, setEntry] = useState("");
+	const [entryTitle, setEntryTitle] = useState("");
+	const [entryBody, setEntryBody] = useState("");
 
 	// Get the tab that the user is currently on, to run once
 	useEffect(() => {
@@ -42,10 +43,16 @@ const Popup = () => {
 	function test() {
 		getCurrentTime(activeTab);
 		console.log(timeStamp)
+	}
+
+	function handleSubmit(e) {
+		e.preventDefault();
+		getCurrentTime(activeTab);
+		console.log(timeStamp)
 	} useEffect(() => {
 		if (timeStamp !== 0) {
 			const md = new Markdown(videoTitle, currentURL);
-			md.append("Sample header title for markdown", "* This is a test content at this current time", timeStamp);
+			md.append(entryTitle, entryBody, timeStamp);
 			md.createBlob();
 		}
 	}, [timeStamp]);
@@ -71,6 +78,18 @@ const Popup = () => {
 				<button onClick={() => {
 					test()
 				}}>Test</button>
+
+				<form onSubmit={ handleSubmit }>
+					<input
+						value={entryTitle}
+						onChange={(e) => setEntryTitle(e.target.value)}
+					/>
+					<textarea 
+						value={entryBody} 
+						onChange={(e) => setEntryBody(e.target.value)}>
+					</textarea>
+					<input type="submit" />
+				</form>
 			</header>
 		</div>
 	);
