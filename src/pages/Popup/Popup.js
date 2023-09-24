@@ -46,10 +46,6 @@ const Popup = () => {
 		});
 	}
 
-	function test() {
-		md.createBlob();
-	}
-
 	function handleSubmit(e) {
 		e.preventDefault();
 		getCurrentTime(activeTab);
@@ -57,6 +53,8 @@ const Popup = () => {
 	} useEffect(() => {
 		if (timeStamp !== 0) {
 			md.append(entryTitle, entryBody, timeStamp);
+			setEntryTitle("");
+			setEntryBody("");
 		}
 	}, [timeStamp]);
 	
@@ -79,8 +77,8 @@ const Popup = () => {
 					toggle(activeTab);
 				}}>Toggle</button>
 				<button onClick={() => {
-					test()
-				}}>Test</button>
+					md.createBlob();
+				}}>Download</button>
 
 				<form onSubmit={ handleSubmit }>
 					<input
