@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TextField from "./Components/TextField";
-import "./Popup.css";
+import NotOnYouTube from "./Components/NotOnYouTube";
 import Markdown from "../../modules/Markdown";
 import { getVideoTitle, sendMessage } from "../../modules/ChromeHelper";
 
@@ -9,6 +9,7 @@ const Popup = () => {
 	const [activeTab, setActiveTab] = useState(null);
 	const [timeStamp, setTimeStamp] = useState(0);
 	const [videoTitle, setVideoTitle] = useState("");
+	const [currentURL, setCurrentURL] = useState("");
 	const [entryTitle, setEntryTitle] = useState("");
 	const [entryBody, setEntryBody] = useState("");
 
@@ -22,7 +23,8 @@ const Popup = () => {
 				let title = getVideoTitle(currentTab.title);
 				setActiveTab(currentTab);
 				setVideoTitle(title);
-
+				setCurrentURL(url);
+				
 				// Deal with MD content
 				const serializedData = localStorage.getItem("ytmd");
 				if (serializedData) {
@@ -81,40 +83,51 @@ const Popup = () => {
 			localStorage.setItem("ytmd", JSON.stringify(serializedData));
 		}
 	}, [timeStamp]);
-	
-	return ( 
-		<div className="App">
-			<header className="App-header">
-				<p>
-					Add a note for { videoTitle }
-				</p>
-				<button onClick={() => {
-					toggle(activeTab);
-				}}>Toggle</button>
-				<button onClick={() => {
-					md.createBlob();
-					localStorage.clear();
-				}}>Download</button>
-				<button onClick={() => {
-					localStorage.clear();
-				}}>Clear</button>
-				<button onClick={() => {
-					if (JSON.parse(localStorage.getItem("ytmd"))) {
-						console.log("Local storage")
-						console.log(JSON.parse(localStorage.getItem("ytmd")));
-					} else {
-						console.log("Mark down object")
-						console.log(md);
-					}
-				}}>Print</button>
 
-				<TextField 
-					handleSubmit={ handleSubmit }
-					title={{ value: entryTitle, set: setEntryTitle }}
-					body={{ value: entryBody, set: setEntryBody }}
-				/>
-			</header>
-		</div>
+	return ( 
+		<>
+			{ 
+				currentURL.includes("www.youtube.com") ?
+				<>
+					<div className="App">
+						<header className="App-header">
+							<p>
+								Add a note for { videoTitle }
+							</p>
+							<button onClick={() => {
+								toggle(activeTab);
+							}}>Toggle</button>
+							<button onClick={() => {
+								md.createBlob();
+								localStorage.clear();
+							}}>Download</button>
+							<button onClick={() => {
+								localStorage.clear();
+							}}>Clear</button>
+							<button onClick={() => {
+								if (JSON.parse(localStorage.getItem("ytmd"))) {
+									console.log("Local storage")
+									console.log(JSON.parse(localStorage.getItem("ytmd")));
+								} else {
+									console.log("Mark down object")
+									console.log(md);
+								}
+							}}>Print</button>
+
+							<TextField 
+								handleSubmit={ handleSubmit }
+								title={{ value: entryTitle, set: setEntryTitle }}
+								body={{ value: entryBody, set: setEntryBody }}
+							/>
+						</header>
+					</div>
+				</>
+
+				:
+
+				<NotOnYouTube />
+			}
+		</>
 	);
 };
 
