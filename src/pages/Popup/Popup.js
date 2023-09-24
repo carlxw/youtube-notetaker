@@ -87,7 +87,7 @@ const Popup = () => {
 	return ( 
 		<>
 			{ 
-				currentURL.includes("www.youtube.com") ?
+				currentURL.includes("www.youtube.com/watch") ?
 				<>
 					<div className="App">
 						<header className="App-header">
