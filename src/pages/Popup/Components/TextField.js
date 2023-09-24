@@ -7,11 +7,13 @@ const TextField = ({ handleSubmit, title, body }) => {
             <input
                 value={title.value}
                 onChange={(e) => title.set(e.target.value)}
+                placeholder={"Add your note title here..."}
             />
             <textarea 
                 value={body.value} 
-                onChange={(e) => body.set(e.target.value)}>
-            </textarea>
+                onChange={(e) => body.set(e.target.value)}
+                placeholder={"Write down any thoughts..."}
+            />
             <br />
             <input type="submit" />
         </form>

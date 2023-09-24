@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import TextField from "./Components/TextField";
-import logo from "../../assets/img/logo.svg";
 import "./Popup.css";
 import Markdown from "../../modules/Markdown";
 import { getVideoTitle, sendMessage } from "../../modules/ChromeHelper";
@@ -9,7 +8,7 @@ const Popup = () => {
 	const [md, setmd] = useState(null);
 	const [activeTab, setActiveTab] = useState(null);
 	const [timeStamp, setTimeStamp] = useState(0);
-
+	const [videoTitle, setVideoTitle] = useState("");
 	const [entryTitle, setEntryTitle] = useState("");
 	const [entryBody, setEntryBody] = useState("");
 
@@ -22,6 +21,7 @@ const Popup = () => {
 				let url = currentTab.url.includes("&t=") ? currentTab.url.split("&t=")[0] : currentTab.url;
 				let title = getVideoTitle(currentTab.title);
 				setActiveTab(currentTab);
+				setVideoTitle(title);
 
 				// Deal with MD content
 				const serializedData = localStorage.getItem("ytmd");
@@ -85,18 +85,9 @@ const Popup = () => {
 	return ( 
 		<div className="App">
 			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
 				<p>
-					Edit <code>src/pages/Popup/Popup.jsx</code> and save to reload.
+					Add a note for { videoTitle }
 				</p>
-				<a
-					className="App-link"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn React!
-				</a>
 				<button onClick={() => {
 					toggle(activeTab);
 				}}>Toggle</button>
