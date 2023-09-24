@@ -105,6 +105,7 @@ const Popup = () => {
 				}}>Toggle</button>
 				<button onClick={() => {
 					md.createBlob();
+					localStorage.clear();
 				}}>Download</button>
 				<button onClick={() => {
 					localStorage.clear();
