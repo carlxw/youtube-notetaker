@@ -5,17 +5,17 @@ const TextField = ({ handleSubmit, title, body }) => {
     return (
         <>
             <span>
-                <button onClick={() => richText("bold")}><b>B</b></button>
-                <button onClick={() => richText("italic")}><i>I</i></button>
-                <button onClick={() => richText("underline")}><u>U</u></button>
+                <button onClick={() => richText("bold", body)}><b>B</b></button>
+                <button onClick={() => richText("italic", body)}><i>I</i></button>
+                <button onClick={() => richText("underline", body)}><u>U</u></button>
             </span>
             <span>
-                <button onClick={() => richText("latex_inline")}><code>LaTeX Inline</code></button>
-                <button onClick={() => richText("latex_block")}><code>LaTeX Block</code></button>
+                <button onClick={() => richText("latex_inline", body)}><code>LaTeX Inline</code></button>
+                <button onClick={() => richText("latex_block", body)}><code>LaTeX Block</code></button>
             </span>
             <span>
-                <button onClick={ sampleSelection }>*</button>
-                <button onClick={ sampleSelection }><code>1.</code></button>
+                <button onClick={() => richText("list_point", body)}>*</button>
+                <button onClick={() => richText("list_number", body)}><code>1.</code></button>
             </span>
             <form onSubmit={handleSubmit}>
                 <input

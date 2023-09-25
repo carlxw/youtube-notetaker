@@ -24,38 +24,37 @@ function sampleSelection() {
     console.log((text.match(/\n/g) || []).length)
 }
 
-function richText(action) {
+function richText(action, content) {
     // User has text highlighted, only do something to the highlighted
     let text = getSelectionText();
     let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
 
-    console.log(text)
     if (text) {
         switch (action) {
             case "bold":
-                body.value = body.value.slice(0, index[1]) + "**" + body.value.slice(index[1]);
-                body.value = body.value.slice(0, index[0]) + "**" + body.value.slice(index[0]);
-                body.set(body.value);
+                content.value = content.value.slice(0, index[1]) + "**" + content.value.slice(index[1]);
+                content.value = content.value.slice(0, index[0]) + "**" + content.value.slice(index[0]);
+                content.set(content.value);
                 break;
             case "italic":
-                body.value = body.value.slice(0, index[1]) + "*" + body.value.slice(index[1]);
-                body.value = body.value.slice(0, index[0]) + "*" + body.value.slice(index[0]);
-                body.set(body.value);
+                content.value = content.value.slice(0, index[1]) + "*" + content.value.slice(index[1]);
+                content.value = content.value.slice(0, index[0]) + "*" + content.value.slice(index[0]);
+                content.set(content.value);
                 break;
             case "underline":
-                body.value = body.value.slice(0, index[1]) + "__" + body.value.slice(index[1]);
-                body.value = body.value.slice(0, index[0]) + "__" + body.value.slice(index[0]);
-                body.set(body.value);
+                content.value = content.value.slice(0, index[1]) + "__" + content.value.slice(index[1]);
+                content.value = content.value.slice(0, index[0]) + "__" + content.value.slice(index[0]);
+                content.set(content.value);
                 break;
             case "latex_inline":
-                body.value = body.value.slice(0, index[1]) + "$" + body.value.slice(index[1]);
-                body.value = body.value.slice(0, index[0]) + "$" + body.value.slice(index[0]);
-                body.set(body.value);
+                content.value = content.value.slice(0, index[1]) + "$" + content.value.slice(index[1]);
+                content.value = content.value.slice(0, index[0]) + "$" + content.value.slice(index[0]);
+                content.set(content.value);
                 break;
             case "latex_block":
-                body.value = body.value.slice(0, index[1]) + "$$" + body.value.slice(index[1]);
-                body.value = body.value.slice(0, index[0]) + "$$" + body.value.slice(index[0]);
-                body.set(body.value);
+                content.value = content.value.slice(0, index[1]) + "$$" + content.value.slice(index[1]);
+                content.value = content.value.slice(0, index[0]) + "$$" + content.value.slice(index[0]);
+                content.set(content.value);
                 break;
             // Implement something for bullet points and number lists
             default: throw ("Incorrect parameter provided");
@@ -66,25 +65,25 @@ function richText(action) {
     else {
         switch (action) {
             case "bold":
-                body.set(body.value + ` ** text **`);
+                content.set(content.value + ` ** text **`);
                 break;
             case "italic":
-                body.set(body.value + ` * text *`);;
+                content.set(content.value + ` * text *`);;
                 break;
             case "underline":
-                body.set(body.value + ` __ text __`);
+                content.set(content.value + ` __ text __`);
                 break;
             case "latex_inline":
-                body.set(body.value + ` $ equation $`);
+                content.set(content.value + ` $ equation $`);
                 break;
             case "latex_block":
-                body.set(body.value + ` $$ equation $$`);
+                content.set(content.value + ` $$ equation $$`);
                 break;
             case "list_number":
-                body.set(body.value + `\n1. text`);
+                content.set(content.value + `\n1. text`);
                 break;
             case "list_point":
-                body.set(body.value + `\n* text`);
+                content.set(content.value + `\n* text`);
             default: throw ("Incorrect parameter provided");
         }
     }
