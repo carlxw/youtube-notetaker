@@ -43,6 +43,17 @@ function adjustSelection(text, oldstart) {
 //     }
 // }
 
+/**
+ * Helper function for rich text editing
+ * 
+ * @param {string} text Value of string to modify
+ * @param {number} index The index of where to insert
+ * @param {string} value The string that is to be inserted at the specified index   
+ */
+function insert(text, index, value) {
+    return text.slice(0, index) + value + content.value.slice(index);
+}
+
 function richText(action, content) {
     // User has text highlighted, only do something to the highlighted
     let text = getSelectionText();
@@ -52,28 +63,28 @@ function richText(action, content) {
     if (text) {
         switch (action) {
             case "bold":
-                content.value = content.value.slice(0, index[1]) + "**" + content.value.slice(index[1]);
-                content.value = content.value.slice(0, index[0]) + "**" + content.value.slice(index[0]);
+                content.value = insert(content.value, index[1], "**");
+                content.value = insert(content.value, index[0], "**");
                 content.set(content.value);
                 break;
             case "italic":
-                content.value = content.value.slice(0, index[1]) + "*" + content.value.slice(index[1]);
-                content.value = content.value.slice(0, index[0]) + "*" + content.value.slice(index[0]);
+                content.value = insert(content.value, index[1], "*");
+                content.value = insert(content.value, index[0], "*");
                 content.set(content.value);
                 break;
             case "underline":
-                content.value = content.value.slice(0, index[1]) + "__" + content.value.slice(index[1]);
-                content.value = content.value.slice(0, index[0]) + "__" + content.value.slice(index[0]);
+                content.value = insert(content.value, index[1], "__");
+                content.value = insert(content.value, index[0], "__");
                 content.set(content.value);
                 break;
             case "latex_inline":
-                content.value = content.value.slice(0, index[1]) + "$" + content.value.slice(index[1]);
-                content.value = content.value.slice(0, index[0]) + "$" + content.value.slice(index[0]);
+                content.value = insert(content.value, index[1], "$");
+                content.value = insert(content.value, index[0], "$");
                 content.set(content.value);
                 break;
             case "latex_block":
-                content.value = content.value.slice(0, index[1]) + "$$" + content.value.slice(index[1]);
-                content.value = content.value.slice(0, index[0]) + "$$" + content.value.slice(index[0]);
+                content.value = insert(content.value, index[1], "$$");
+                content.value = insert(content.value, index[0], "$$");
                 content.set(content.value);
                 break;
             // Implement something for bullet points and number lists
@@ -108,11 +119,11 @@ function richText(action, content) {
                 break;
             case "list_number":
                 format = `1. text`;
-                content.set(endchar !== "\n" ? `\n${ format }` : format);
+                content.set(endChar !== "\n" ? `\n${ format }` : format);
                 break;
             case "list_point":
                 format = `* text`;
-                content.set(endchar !== "\n" ? `\n${ format }` : format);
+                content.set(endChar !== "\n" ? `\n${ format }` : format);
                 break;
             default: throw ("Incorrect parameter provided");
         }
