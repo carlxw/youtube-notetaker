@@ -7,7 +7,8 @@ const TextField = ({ handleSubmit, title, body }) => {
         var text = "";
         if (window.getSelection) text = window.getSelection().toString(); 
         else if (document.selection && document.selection.type != "Control") text = document.selection.createRange().text;
-        return text;
+
+        return text[text.length - 1] === " " ? text.substring(0, text.length - 1) : text;
     }
 
     // Returns the starting position of what has been highlighted
@@ -21,6 +22,7 @@ const TextField = ({ handleSubmit, title, body }) => {
         let text = getSelectionText();
         let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
 
+        console.log(text)
         if (text) {
             switch(action) {
                 case "bold":
@@ -50,9 +52,9 @@ const TextField = ({ handleSubmit, title, body }) => {
 
     return (
         <>    
-            <button onClick={() => richText("bold")}>Bold</button>
-            <button onClick={() => richText("italic")}>Italic</button>
-            <button onClick={() => richText("underline")}>Underline</button>
+            <button onClick={() => richText("bold")}><b>B</b></button>
+            <button onClick={() => richText("italic")}><i>I</i></button>
+            <button onClick={() => richText("underline")}><u>U</u></button>
             <form onSubmit={ handleSubmit }>
                 <input
                     value={title.value}
