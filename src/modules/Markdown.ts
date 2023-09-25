@@ -19,12 +19,12 @@ class Markdown {
     ytTitle: string;
     mdcontent: MdEntry[];
 
-    constructor(ytTitle: string, yturl: string) {
+    constructor(ytTitle: string, yturl: string, content: MdEntry[] = []) {
         this.ytTitle = ytTitle;
         this.yturl = yturl;
 
         // Init the array
-        this.mdcontent = [];
+        this.mdcontent = content;
     }
 
     createBlob(fileName: string = "output.md"): void {

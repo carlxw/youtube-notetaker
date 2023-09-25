@@ -60,7 +60,7 @@ class LocalStorage {
      * @param {string} url The current URL the user is on, used to identify sessions
      */
     setNote(obj, url) {
-        localStorage.setItem(`${ videoKey }${ url }`, obj);
+        localStorage.setItem(`${ videoKey }${ url }`, JSON.stringify(obj));
     }
 
     /**
@@ -74,5 +74,6 @@ class LocalStorage {
         return JSON.parse(localStorage.getItem(`${ videoKey }${ url }`));
     }
 }
+const storage = new LocalStorage();
 
-export default new LocalStorage();
+export default storage;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "./Components/TextField";
 import NotOnYouTube from "./Components/NotOnYouTube";
 import Markdown from "../../modules/Markdown";
+import storage from "../../modules/LocalStorage";
 import { getVideoTitle, sendMessage } from "../../modules/ChromeHelper";
 
 const Popup = () => {
@@ -25,28 +26,66 @@ const Popup = () => {
 				setVideoTitle(title);
 				setCurrentURL(url);
 				
-				// Deal with MD content
-				const serializedData = localStorage.getItem("ytmd");
-				if (serializedData) {
-					// Deserialize the data
-					console.log("Restoring from previous session...");
-					const parsedData = JSON.parse(serializedData);
+				// Deal with MD content in local storage
+				const parsedDataMd = storage.getNote(url);
+				if (parsedDataMd) {
+					console.log("Restoring Markdown from previous session...");
+					console.log(parsedDataMd);
 		
-					// Create a new instance of the Markdown class
-					const storedmd = new Markdown(parsedData.ytTitle, parsedData.yturl);
-					storedmd.mdcontent = parsedData.mdcontent;
-		
-					// Now you can work with 'md' as a Markdown object with its methods
-					setmd(storedmd);
-					localStorage.clear();
-				}
-				else {
+					setmd(new Markdown(parsedDataMd.ytTitle, parsedDataMd.yturl, parsedDataMd.mdcontent));
+					storage.clearAllNotes(); // Rework this to delete a specific one by url
+				} else {
 					console.log("New Markdown session has been created");
 					setmd(new Markdown(title, url));
+				}
+
+				// Deal with any pre-existing text entries in the local storage
+				const parsedDataText = storage.getText();
+				if (parsedDataText) {
+					console.log("Restoring text from previous session...");
+					console.log(parsedDataText);
+
+					setEntryTitle(parsedDataText.title);
+					setEntryBody(parsedDataText.body);
 				}
 			}
 		});
 	}, []);
+
+	// On submit button
+	useEffect(() => {
+		// There may be a bug here
+		if (timeStamp !== 0) {
+			md.append(entryTitle, entryBody, timeStamp);
+			setEntryTitle("");
+			setEntryBody("");
+
+			// Text has been sucessfully used
+			storage.clearText();
+
+			// Serialize only the data needed to recreate the object
+			const serializedData = {
+				ytTitle: md.ytTitle,
+				yturl: md.yturl,
+				mdcontent: md.mdcontent
+			};
+
+			console.log("Setting data to local storage");
+			storage.setNote(serializedData, currentURL);
+		}
+	}, [timeStamp]);
+
+	// Whenever one of the text fields have been edited
+	useEffect(() => {
+		if (entryTitle === "" && entryBody === "") return;
+
+		const serializedData = {
+			title: entryTitle,
+			body: entryBody
+		}
+
+		storage.setText(serializedData);
+	}, [entryTitle, entryBody]);
 
 	function toggle(tab) {
 		return sendMessage(tab, { action: "toggle" }, (res, err) => {});
@@ -66,23 +105,7 @@ const Popup = () => {
 	function handleSubmit(e) {
 		e.preventDefault();
 		getCurrentTime(activeTab);
-	} useEffect(() => {
-		if (timeStamp !== 0) {
-			md.append(entryTitle, entryBody, timeStamp);
-			setEntryTitle("");
-			setEntryBody("");
-
-			// Serialize only the data needed to recreate the object
-			const serializedData = {
-				ytTitle: md.ytTitle,
-				yturl: md.yturl,
-				mdcontent: md.mdcontent
-			};
-
-			console.log("Setting data to local storage");
-			localStorage.setItem("ytmd", JSON.stringify(serializedData));
-		}
-	}, [timeStamp]);
+	} 
 
 	return ( 
 		<>
@@ -100,6 +123,8 @@ const Popup = () => {
 								}}>Toggle</button>
 								<button onClick={() => {
 									md.createBlob();
+
+									// Need to change this to only clear specific data
 									localStorage.clear();
 								}}>Download</button>
 								<button onClick={() => {
