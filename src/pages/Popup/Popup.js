@@ -94,25 +94,27 @@ const Popup = () => {
 							<p>
 								Add a note for { videoTitle }
 							</p>
-							<button onClick={() => {
-								toggle(activeTab);
-							}}>Toggle</button>
-							<button onClick={() => {
-								md.createBlob();
-								localStorage.clear();
-							}}>Download</button>
-							<button onClick={() => {
-								localStorage.clear();
-							}}>Clear</button>
-							<button onClick={() => {
-								if (JSON.parse(localStorage.getItem("ytmd"))) {
-									console.log("Local storage")
-									console.log(JSON.parse(localStorage.getItem("ytmd")));
-								} else {
-									console.log("Mark down object")
-									console.log(md);
-								}
-							}}>Print</button>
+							<span>
+								<button onClick={() => {
+									toggle(activeTab);
+								}}>Toggle</button>
+								<button onClick={() => {
+									md.createBlob();
+									localStorage.clear();
+								}}>Download</button>
+								<button onClick={() => {
+									localStorage.clear();
+								}}>Clear</button>
+								<button onClick={() => {
+									if (JSON.parse(localStorage.getItem("ytmd"))) {
+										console.log("Local storage")
+										console.log(JSON.parse(localStorage.getItem("ytmd")));
+									} else {
+										console.log("Mark down object")
+										console.log(md);
+									}
+								}}>Print</button>
+							</span>
 
 							<TextField 
 								handleSubmit={ handleSubmit }

@@ -1,72 +1,34 @@
 import React from "react";
+import { richText, sampleSelection } from "../../../modules/RichTextEditing";
 
-// Implement scuffed rich text editing
 const TextField = ({ handleSubmit, title, body }) => {
-    // https://stackoverflow.com/questions/5379120/get-the-highlighted-selected-text
-    function getSelectionText() {
-        var text = "";
-        if (window.getSelection) text = window.getSelection().toString(); 
-        else if (document.selection && document.selection.type != "Control") text = document.selection.createRange().text;
-
-        return text.trim();
-    }
-
-    // Returns the starting position of what has been highlighted
-    function getHighlightedIndex() {
-        const textarea = document.getElementById("md_textarea");
-        return textarea.selectionStart;;
-    }
-
-    function richText(action) {
-        // User has text highlighted, only do something to the highlighted
-        let text = getSelectionText();
-        let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
-
-        console.log(text)
-        if (text) {
-            switch(action) {
-                case "bold":
-                    body.value = body.value.slice(0, index[1]) + "**" + body.value.slice(index[1]);
-                    body.value = body.value.slice(0, index[0]) + "**" + body.value.slice(index[0]);
-                    body.set(body.value);
-                    break;
-                case "italic":
-                    body.value = body.value.slice(0, index[1]) + "*" + body.value.slice(index[1]);
-                    body.value = body.value.slice(0, index[0]) + "*" + body.value.slice(index[0]);
-                    body.set(body.value);
-                    break;
-                case "underline":
-                    body.value = body.value.slice(0, index[1]) + "__" + body.value.slice(index[1]);
-                    body.value = body.value.slice(0, index[0]) + "__" + body.value.slice(index[0]);
-                    body.set(body.value);
-                    break;
-                default: throw("Incorrect parameter provided");
-            }
-        }
-
-        // Insert boilerplate at the end of the string
-        else {
-
-        }
-    }
-
     return (
-        <>    
-            <button onClick={() => richText("bold")}><b>B</b></button>
-            <button onClick={() => richText("italic")}><i>I</i></button>
-            <button onClick={() => richText("underline")}><u>U</u></button>
-            <form onSubmit={ handleSubmit }>
+        <>
+            <span>
+                <button onClick={() => richText("bold")}><b>B</b></button>
+                <button onClick={() => richText("italic")}><i>I</i></button>
+                <button onClick={() => richText("underline")}><u>U</u></button>
+            </span>
+            <span>
+                <button onClick={() => richText("latex_inline")}><code>LaTeX Inline</code></button>
+                <button onClick={() => richText("latex_block")}><code>LaTeX Block</code></button>
+            </span>
+            <span>
+                <button onClick={ sampleSelection }>*</button>
+                <button onClick={ sampleSelection }><code>1.</code></button>
+            </span>
+            <form onSubmit={handleSubmit}>
                 <input
                     value={title.value}
                     onChange={(e) => title.set(e.target.value)}
                     placeholder={"Add your note title here..."}
-                    />
-                <textarea 
+                />
+                <textarea
                     id="md_textarea"
-                    value={body.value} 
+                    value={body.value}
                     onChange={(e) => body.set(e.target.value)}
                     placeholder={"Write down any thoughts..."}
-                    />
+                />
                 <br />
                 <input type="submit" />
             </form>
