@@ -56,7 +56,7 @@ const Popup = () => {
 	useEffect(() => {
 		// There may be a bug here
 		if (timeStamp !== 0) {
-			md.append(entryTitle, entryBody, timeStamp);
+			md.push(entryTitle, entryBody, timeStamp);
 			setEntryTitle("");
 			setEntryBody("");
 
@@ -131,6 +131,9 @@ const Popup = () => {
 									localStorage.clear();
 								}}>Clear</button>
 								<button onClick={() => {
+									md.pop();
+								}}>Delete Last</button>
+								{/* <button onClick={() => {
 									if (JSON.parse(localStorage.getItem("ytmd"))) {
 										console.log("Local storage")
 										console.log(JSON.parse(localStorage.getItem("ytmd")));
@@ -138,7 +141,7 @@ const Popup = () => {
 										console.log("Mark down object")
 										console.log(md);
 									}
-								}}>Print</button>
+								}}>Print</button> */}
 							</span>
 
 							<TextField 

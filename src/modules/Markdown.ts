@@ -60,8 +60,12 @@ class Markdown {
         }
     }
 
-    append(title: string, content: string, timeStamp: number): void {
+    push(title: string, content: string, timeStamp: number): void {
         this.mdcontent.push(new MdEntry(this.mdcontent.length, title, content, timeStamp));
+    }
+
+    pop() {
+        this.mdcontent.pop();
     }
 
     removeTitle(title: string): void {
@@ -73,6 +77,7 @@ class Markdown {
         }
         throw("Item not found in array");
     } 
+
     
     removeID(id: number): void {
         for (let i = 0; i < this.mdcontent.length; i++) {
