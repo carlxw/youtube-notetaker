@@ -13,35 +13,27 @@ function getHighlightedIndex() {
     return textarea.selectionStart;;
 }
 
+/**
+ * Identifies where the first breakline character is in a selected string from a larger string
+ * 
+ * @param {string} text The full text of what to observe
+ * @param {number} oldstart The number that was initially proposed
+ * @returns Modified number that reflects where to put the first instance of a breakline
+ */
 function adjustSelection(text, oldstart) {
-    let start;
+    let start = 0;
+
     // Loop backwards from the selection start to find a \n somewhere, there is an edge case when the the iterating variable is 0
-    for (let i = oldstart.length; i >= 0; i--) {
-        if (text.substring(i, i+1) === "\n") start = i;
+    for (let i = oldstart; i >= 0; i--) {
+        if (text[i] === "\n") {
+            start = i;
+            break;
+        }
     }
 
     // Return 2 values: The new starting index and the old starting index; interesting case can occur if start is equal to end
     return start;
 }
-
-// // Debug purposes
-// function sampleSelection(fulltext) {
-//     // User has text highlighted, only do something to the highlighted
-//     let text = getSelectionText();
-//     let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
-
-//     console.log(text, index);
-
-//     index[0] = adjustSelection(fulltext, index[0]);
-//     let x = fulltext.substring(index[0], index[1]);
-//     console.log(x);
-//     console.log(x.replaceAll("\n", "\n* "));
-//     for (let i = index[1]; i >= index[0]; i--) {
-//         if (fulltext.substring(i, i + 1) === "\n") {
-
-//         }
-//     }
-// }
 
 /**
  * Helper function for rich text editing
@@ -51,7 +43,32 @@ function adjustSelection(text, oldstart) {
  * @param {string} value The string that is to be inserted at the specified index   
  */
 function insert(text, index, value) {
-    return text.slice(0, index) + value + content.value.slice(index);
+    return text.slice(0, index) + value + text.slice(index);
+}
+
+/**
+ * Adds a character next to a breakline character
+ * 
+ * @param {string} fulltext The entire string to analyze
+ * @param {number[]} index The starting and end of the user selection
+ * @param {string} insert Element to insert next to the breakline character
+ * @returns Modified full text string that contains the adquate modifications
+ */
+function insertAtBreakline(fulltext, index, element) {
+    let temp = adjustSelection(fulltext, index[0]);
+    index[0] = temp;
+    
+    // Identify where to insert character
+    for (let i = index[1]; i >= index[0]; i--) {
+        if (fulltext[i] === "\n") {
+            fulltext = insert(fulltext, i+1, element);
+        }
+    }
+
+    // Edge case
+    if (index[0] === 0) fulltext = element + fulltext.trim();
+
+    return fulltext;
 }
 
 function richText(action, content) {
@@ -87,7 +104,13 @@ function richText(action, content) {
                 content.value = insert(content.value, index[0], "$$");
                 content.set(content.value);
                 break;
-            // Implement something for bullet points and number lists
+            case "list_number":
+                content.set(insertAtBreakline(content.value, index, "1. "));
+                break;
+            case "list_point":
+                content.set(insertAtBreakline(content.value, index, "* "));
+                break;
+            // Also need to implement something when only the cursor is at specific position
             default: throw ("Incorrect parameter provided");
         }
     }
@@ -99,35 +122,35 @@ function richText(action, content) {
         switch (action) {
             case "bold":
                 format = `** text **`;
-                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
+                content.set(content.value + (endChar !== " " ? ` ${ format }` : `\n${format}`));
                 break;
             case "italic":
                 format = `* text *`;
-                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
+                content.set(content.value + (endChar !== " " ? ` ${ format }` : `\n${format}`));
                 break;
             case "underline":
                 format = `__ text __`;
-                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
+                content.set(content.value + (endChar !== " " ? ` ${ format }` : `\n${format}`));
                 break;
             case "latex_inline":
                 format = `$ text $`;
-                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
+                content.set(content.value + (endChar !== " " ? ` ${ format }` : `\n${format}`));
                 break;
             case "latex_block":
                 format = `$$ text $$`;
-                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
+                content.set(content.value + (endChar !== " " ? ` ${ format }` : `\n${format}`));
                 break;
             case "list_number":
                 format = `1. text`;
-                content.set(endChar !== "\n" ? `\n${ format }` : format);
+                content.set(content.value + (endChar !== "\n" ? `\n${ format }` : `\n${format}`));
                 break;
             case "list_point":
                 format = `* text`;
-                content.set(endChar !== "\n" ? `\n${ format }` : format);
+                content.set(content.value + (endChar !== "\n" ? `\n${ format }` : `\n${format}`));
                 break;
             default: throw ("Incorrect parameter provided");
         }
     }
 }
 
-export { richText, sampleSelection };
+export { richText };

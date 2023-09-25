@@ -1,5 +1,5 @@
 import React from "react";
-import { richText, sampleSelection } from "../../../modules/RichTextEditing";
+import { richText } from "../../../modules/RichTextEditing";
 
 const TextField = ({ handleSubmit, title, body }) => {
     return (
@@ -14,10 +14,8 @@ const TextField = ({ handleSubmit, title, body }) => {
                 <button onClick={() => richText("latex_block", body)}><code>LaTeX Block</code></button>
             </span>
             <span>
-                {/* <button onClick={() => richText("list_point", body)}>*</button>
-                <button onClick={() => richText("list_number", body)}><code>1.</code></button> */}
-                <button onClick={() => sampleSelection(body.value)}>*</button>
-                <button onClick={() => sampleSelection(body.value)}><code>1.</code></button>
+                <button onClick={() => richText("list_point", body)}>*</button>
+                <button onClick={() => richText("list_number", body)}><code>1.</code></button>
             </span>
             <form onSubmit={handleSubmit}>
                 <input
