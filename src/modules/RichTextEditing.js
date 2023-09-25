@@ -13,22 +13,42 @@ function getHighlightedIndex() {
     return textarea.selectionStart;;
 }
 
-// Debug purposes
-function sampleSelection() {
-    // User has text highlighted, only do something to the highlighted
-    let text = getSelectionText();
-    let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
+function adjustSelection(text, oldstart) {
+    let start;
+    // Loop backwards from the selection start to find a \n somewhere, there is an edge case when the the iterating variable is 0
+    for (let i = oldstart.length; i >= 0; i--) {
+        if (text.substring(i, i+1) === "\n") start = i;
+    }
 
-    console.log(text, index);
-
-    console.log((text.match(/\n/g) || []).length)
+    // Return 2 values: The new starting index and the old starting index; interesting case can occur if start is equal to end
+    return start;
 }
+
+// // Debug purposes
+// function sampleSelection(fulltext) {
+//     // User has text highlighted, only do something to the highlighted
+//     let text = getSelectionText();
+//     let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
+
+//     console.log(text, index);
+
+//     index[0] = adjustSelection(fulltext, index[0]);
+//     let x = fulltext.substring(index[0], index[1]);
+//     console.log(x);
+//     console.log(x.replaceAll("\n", "\n* "));
+//     for (let i = index[1]; i >= index[0]; i--) {
+//         if (fulltext.substring(i, i + 1) === "\n") {
+
+//         }
+//     }
+// }
 
 function richText(action, content) {
     // User has text highlighted, only do something to the highlighted
     let text = getSelectionText();
     let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
 
+    // Insert elements at the endpoints of the highlighted text
     if (text) {
         switch (action) {
             case "bold":
@@ -63,27 +83,37 @@ function richText(action, content) {
 
     // Insert boilerplate at the end of the string
     else {
+        let endChar = content.value[content.value.length - 1];
+        let format;
         switch (action) {
             case "bold":
-                content.set(content.value + ` ** text **`);
+                format = `** text **`;
+                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
                 break;
             case "italic":
-                content.set(content.value + ` * text *`);;
+                format = `* text *`;
+                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
                 break;
             case "underline":
-                content.set(content.value + ` __ text __`);
+                format = `__ text __`;
+                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
                 break;
             case "latex_inline":
-                content.set(content.value + ` $ equation $`);
+                format = `$ text $`;
+                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
                 break;
             case "latex_block":
-                content.set(content.value + ` $$ equation $$`);
+                format = `$$ text $$`;
+                content.set(endChar !== " " ? content.value + ` ${ format }` : format);
                 break;
             case "list_number":
-                content.set(content.value + `\n1. text`);
+                format = `1. text`;
+                content.set(endchar !== "\n" ? `\n${ format }` : format);
                 break;
             case "list_point":
-                content.set(content.value + `\n* text`);
+                format = `* text`;
+                content.set(endchar !== "\n" ? `\n${ format }` : format);
+                break;
             default: throw ("Incorrect parameter provided");
         }
     }
