@@ -8,7 +8,7 @@ const TextField = ({ handleSubmit, title, body }) => {
         if (window.getSelection) text = window.getSelection().toString(); 
         else if (document.selection && document.selection.type != "Control") text = document.selection.createRange().text;
 
-        return text[text.length - 1] === " " ? text.substring(0, text.length - 1) : text;
+        return text.trim();
     }
 
     // Returns the starting position of what has been highlighted
