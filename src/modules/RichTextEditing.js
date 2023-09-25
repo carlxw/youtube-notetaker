@@ -124,23 +124,53 @@ function richText(action, content) {
         switch (action) {
             case "bold":
                 format = `** insert_text_here **`;
-                content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+
+                // content.value is an empty string
+                if (content.value === "") {
+                    content.set(format);
+                }
+                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+
                 break;
             case "italic":
                 format = `* insert_text_here *`;
-                content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+                
+                // content.value is an empty string
+                if (content.value === "") {
+                    content.set(format);
+                }
+                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+
                 break;
             case "underline":
                 format = `__ insert_text_here __`;
-                content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+                
+                // content.value is an empty string
+                if (content.value === "") {
+                    content.set(format);
+                }
+                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+
                 break;
             case "latex_inline":
                 format = `$ insert_text_here $`;
-                content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+                
+                // content.value is an empty string
+                if (content.value === "") {
+                    content.set(format);
+                }
+                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+
                 break;
             case "latex_block":
                 format = `$$ insert_text_here $$`;
-                content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+                
+                // content.value is an empty string
+                if (content.value === "") {
+                    content.set(format);
+                }
+                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
+
                 break;
             case "list_number":
                 format = `1. insert_text_here`;
@@ -151,7 +181,7 @@ function richText(action, content) {
                 }
 
                 else {
-                    content.set(content.value + (endChar !== "\n" ? `\n${ format }` : `\n${format}`));
+                    content.set(content.value + (endChar !== "\n" ? `\n${ format }` : `\n${ format }`));
                 }
                 break;
             case "list_point":
@@ -163,7 +193,7 @@ function richText(action, content) {
                 }
 
                 else {
-                    content.set(content.value + (endChar !== "\n" ? `\n${ format }` : `\n${format}`));
+                    content.set(content.value + (endChar !== "\n" ? `\n${ format }` : `\n${ format }`));
                 }
                 break;
             default: throw ("Incorrect parameter provided");
