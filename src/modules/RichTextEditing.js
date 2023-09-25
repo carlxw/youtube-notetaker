@@ -77,44 +77,38 @@ function richText(action, content) {
     // User has text highlighted, only do something to the highlighted
     let text = getSelectionText();
     let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
+    let element;
 
     // Insert elements at the endpoints of the highlighted text
     if (text) {
         switch (action) {
             case "bold":
-                content.value = insert(content.value, index[1], "**");
-                content.value = insert(content.value, index[0], "**");
-                content.set(content.value);
+                element = "**";
                 break;
             case "italic":
-                content.value = insert(content.value, index[1], "*");
-                content.value = insert(content.value, index[0], "*");
-                content.set(content.value);
+                element = "*";
                 break;
             case "underline":
-                content.value = insert(content.value, index[1], "__");
-                content.value = insert(content.value, index[0], "__");
-                content.set(content.value);
+                element = "__";
                 break;
             case "latex_inline":
-                content.value = insert(content.value, index[1], "$");
-                content.value = insert(content.value, index[0], "$");
-                content.set(content.value);
+                element = "$";
                 break;
             case "latex_block":
-                content.value = insert(content.value, index[1], "$$");
-                content.value = insert(content.value, index[0], "$$");
-                content.set(content.value);
+                element = "$$";
                 break;
             case "list_number":
                 content.set(insertAtBreakline(content.value, index, "1. "));
-                break;
+                return;
             case "list_point":
                 content.set(insertAtBreakline(content.value, index, "* "));
-                break;
+                return;
             // Also need to implement something when only the cursor is at specific position
             default: throw ("Incorrect parameter provided");
         }
+        content.value = insert(content.value, index[1], element);
+        content.value = insert(content.value, index[0], element);
+        content.set(content.value);
     }
 
     // Insert boilerplate at the end of the string
@@ -124,80 +118,36 @@ function richText(action, content) {
         switch (action) {
             case "bold":
                 format = `** insert_text_here **`;
-
-                // content.value is an empty string
-                if (content.value === "") {
-                    content.set(format);
-                }
-                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
-
                 break;
             case "italic":
                 format = `* insert_text_here *`;
-                
-                // content.value is an empty string
-                if (content.value === "") {
-                    content.set(format);
-                }
-                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
-
                 break;
             case "underline":
                 format = `__ insert_text_here __`;
-                
-                // content.value is an empty string
-                if (content.value === "") {
-                    content.set(format);
-                }
-                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
-
                 break;
             case "latex_inline":
                 format = `$ insert_text_here $`;
-                
-                // content.value is an empty string
-                if (content.value === "") {
-                    content.set(format);
-                }
-                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
-
                 break;
             case "latex_block":
                 format = `$$ insert_text_here $$`;
-                
-                // content.value is an empty string
-                if (content.value === "") {
-                    content.set(format);
-                }
-                else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
-
                 break;
             case "list_number":
                 format = `1. insert_text_here`;
-
                 // content.value is an empty string
-                if (content.value === "") {
-                    content.set(format);
-                }
-
-                else {
-                    content.set(content.value + (endChar !== "\n" ? `\n${ format }` : `\n${ format }`));
-                }
-                break;
+                if (content.value === "") content.set(format);
+                else content.set(content.value + `\n${ format }`);
+                return;
             case "list_point":
-                format = `* text`;
-                
+                format = `* insert_text_here`;
                 // content.value is an empty string
-                if (content.value === "") {
-                    content.set(format);
-                }
-
-                else {
-                    content.set(content.value + (endChar !== "\n" ? `\n${ format }` : `\n${ format }`));
-                }
-                break;
+                if (content.value === "") content.set(format);
+                else content.set(content.value + `\n${ format }`);
+                return;
             default: throw ("Incorrect parameter provided");
         }
+        // content.value is an empty string
+        if (content.value === "") content.set(format);
+        else content.set(content.value + (endChar !== " " ? ` ${ format }` : format));
     }
 }
 
