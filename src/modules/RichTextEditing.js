@@ -25,13 +25,15 @@ function adjustSelection(text, oldstart) {
 
     // Loop backwards from the selection start to find a \n somewhere, there is an edge case when the the iterating variable is 0
     for (let i = oldstart; i >= 0; i--) {
+        // If the first character itself is a breakline character, skip it
+        if (i === oldstart && text[i] === "\n") continue;
         if (text[i] === "\n") {
             start = i;
             break;
         }
     }
 
-    // Return 2 values: The new starting index and the old starting index; interesting case can occur if start is equal to end
+    // Return 2 values: The new starting index and the old starting index
     return start;
 }
 
