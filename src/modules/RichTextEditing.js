@@ -129,7 +129,7 @@ function richText(action, content) {
                 format = `$ insert_text_here $`;
                 break;
             case "latex_block":
-                format = `$$ insert_text_here $$`;
+                format = `\n\n$$ insert_text_here $$`;
                 break;
             case "list_number":
                 format = `1. insert_text_here`;
