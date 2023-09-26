@@ -13,6 +13,7 @@ const Popup = () => {
 	const [currentURL, setCurrentURL] = useState("");
 	const [entryTitle, setEntryTitle] = useState("");
 	const [entryBody, setEntryBody] = useState("");
+	const [choice, setChoice] = useState(false);
 
 	// Get the tab that the user is currently on, to run once
 	useEffect(() => {
@@ -28,7 +29,7 @@ const Popup = () => {
 				setCurrentURL(url);
 				
 				// Send message to background script that popup is active
-				let port = chrome.runtime.connect({ name: "popup" });
+				chrome.runtime.connect({ name: "popup" });
 
 				// Deal with MD content in local storage
 				const parsedDataMd = storage.getNote(url);
@@ -58,21 +59,6 @@ const Popup = () => {
 			}
 		});
 	}, []);
-
-	// When the popoup closes
-	window.addEventListener("unload", () => {
-		if (currentURL.includes("www.youtube.com/watch")) {
-			sendMessage(activeTab, { action: "play" }, () => {});
-		}
-	});
-	window.addEventListener("beforeunload", () => {
-		if (currentURL.includes("www.youtube.com/watch")) {
-			sendMessage(activeTab, { action: "play" }, () => {});
-		}
-	});
-	window.onunload = function(){
-		alert("Are you sure?");
-	}
 
 	// On submit button
 	useEffect(() => {
@@ -109,71 +95,57 @@ const Popup = () => {
 		storage.setText(serializedData);
 	}, [entryTitle, entryBody]);
 
-	function toggle(tab) {
-		return sendMessage(tab, { action: "toggle" }, (res, err) => {});
-	}
+	// When user chooses a confirm action
+	useEffect(() => {
+		console.log(`The user chose ${choice}`)
+	}, [choice]);
 
-	function getCurrentTime(tab) {
-		sendMessage(tab, { action: "currentTime" }, (res, error) => {
-			if (error) {
-				console.error(error);
-			} else {
-				// Obtain the current time as a response
-				setTimeStamp(res);
-			}
-		});
-	}
-
+	// Submit annotation entry
 	function handleSubmit(e) {
 		e.preventDefault();
-		getCurrentTime(activeTab);
+		sendMessage(activeTab, { action: "currentTime" }, (res, error) => { setTimeStamp(res) });
 	} 
 
 	return ( 
 		<>
 			{ 
 				currentURL.includes("www.youtube.com/watch") ?
-				<>
-					<div className="App">
-						<header className="App-header">
-							<p>
-								Add a note for { videoTitle }
-							</p>
-							<span>
-								<button onClick={() => {
-									toggle(activeTab);
-								}}>Toggle</button>
-								<button onClick={() => {
-									md.createBlob();
+				<div className="App">
+					<header className="App-header">
+						<p>
+							Add a note for { videoTitle }
+						</p>
+						<span>
+							<button onClick={() => {
+								sendMessage(tab, { action: "toggle" }, (res, err) => {});
+							}}>Toggle</button>
+							<button onClick={() => {
+								md.createBlob();
 
-									// Need to change this to only clear specific data
-									localStorage.clear();
-								}}>Download</button>
-								<button onClick={() => {
-									localStorage.clear();
-								}}>Clear</button>
-								<button onClick={() => {
-									if (confirm("Are you sure you want to remove the latest annotation?")) md.pop();
-								}}>Delete Last</button>
-								{/* <button onClick={() => {
-									if (JSON.parse(localStorage.getItem("ytmd"))) {
-										console.log("Local storage")
-										console.log(JSON.parse(localStorage.getItem("ytmd")));
-									} else {
-										console.log("Mark down object")
-										console.log(md);
+								// Need to change this to only clear specific data
+								localStorage.clear();
+							}}>Download</button>
+							<button onClick={() => {
+								localStorage.clear();
+							}}>Clear</button>
+							<button onClick={() => {
+								sendMessage(
+									activeTab, 
+									{ action: "confirm", message: "This is a test confirm" }, 
+									(res, err) => {
+										setChoice(res);
 									}
-								}}>Print</button> */}
-							</span>
+								);
+							}}>Delete Last</button>
+						</span>
 
-							<TextField 
-								handleSubmit={ handleSubmit }
-								title={{ value: entryTitle, set: setEntryTitle }}
-								body={{ value: entryBody, set: setEntryBody }}
-							/>
-						</header>
-					</div>
-				</>
+						<TextField 
+							handleSubmit={ handleSubmit }
+							title={{ value: entryTitle, set: setEntryTitle }}
+							body={{ value: entryBody, set: setEntryBody }}
+						/>
+					</header>
+				</div>
 
 				:
 

@@ -30,6 +30,11 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     
     else if (request.action === "toggle") video.paused ? video.play() : video.pause();
 
+    else if (request.action === "confirm") {
+        let choice = confirm(request.message);
+        sendResponse(choice);
+    }
+
     try {
         sendResponse("Success");
     } catch {
