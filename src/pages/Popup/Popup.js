@@ -16,6 +16,7 @@ const Popup = () => {
 
 	// Get the tab that the user is currently on, to run once
 	useEffect(() => {
+		// Obtain the current tab data on popup open
 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 			let currentTab = tabs[0];
 			if (tabs.length > 0) {
@@ -26,6 +27,9 @@ const Popup = () => {
 				setVideoTitle(title);
 				setCurrentURL(url);
 				
+				// Send message to background script that popup is active
+				let port = chrome.runtime.connect({ name: "popup" });
+
 				// Deal with MD content in local storage
 				const parsedDataMd = storage.getNote(url);
 				if (parsedDataMd) {
@@ -48,9 +52,27 @@ const Popup = () => {
 					setEntryTitle(parsedDataText.title);
 					setEntryBody(parsedDataText.body);
 				}
+
+				// Pause the video as the user adds an annotation
+				sendMessage(currentTab, { action: "pause" }, () => {});
 			}
 		});
 	}, []);
+
+	// When the popoup closes
+	window.addEventListener("unload", () => {
+		if (currentURL.includes("www.youtube.com/watch")) {
+			sendMessage(activeTab, { action: "play" }, () => {});
+		}
+	});
+	window.addEventListener("beforeunload", () => {
+		if (currentURL.includes("www.youtube.com/watch")) {
+			sendMessage(activeTab, { action: "play" }, () => {});
+		}
+	});
+	window.onunload = function(){
+		alert("Are you sure?");
+	}
 
 	// On submit button
 	useEffect(() => {
@@ -131,7 +153,7 @@ const Popup = () => {
 									localStorage.clear();
 								}}>Clear</button>
 								<button onClick={() => {
-									md.pop();
+									if (confirm("Are you sure you want to remove the latest annotation?")) md.pop();
 								}}>Delete Last</button>
 								{/* <button onClick={() => {
 									if (JSON.parse(localStorage.getItem("ytmd"))) {
