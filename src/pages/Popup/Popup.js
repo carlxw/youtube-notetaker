@@ -138,6 +138,10 @@ const Popup = () => {
 								);
 							}}>Delete Last</button>
 						</span>
+						
+						<button onClick={{
+							// Option the options page here
+						}}>Options</button>
 
 						<TextField 
 							handleSubmit={ handleSubmit }
