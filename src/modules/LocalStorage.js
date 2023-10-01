@@ -29,14 +29,14 @@ class LocalStorage {
      * Prints all video notes data
      */
     printNotes() {
-        config.log(this.getVideoNotes());
+        console.log(this.getVideoNotes());
     }
 
     /**
      * Prints all config data
      */
     printConfig() {
-        config.log(this.getConfig());
+        console.log(this.getConfig());
     }
 
     // Config content =============================================
@@ -89,9 +89,11 @@ class LocalStorage {
      * Deletes all video notes in the local storage
      */
     clearAllNotes() {
-        for (let i = 0; i < localStorage.length; i++) {
+        for (let i = localStorage.length - 1; i >= 0; i--) {
             let key = localStorage.key(i);
-            if (key.includes(VIDEOKEY)) localStorage.removeItem(key);
+            if (key.includes(VIDEOKEY)) {
+                localStorage.removeItem(key);
+            }
         }
     }
 
@@ -125,10 +127,11 @@ class LocalStorage {
         let output = [];
         for (let i = 0; i < localStorage.length; i++) {
             let key = localStorage.key(i);
-            if (key.includes(VIDEOKEY)) output.push(JSON.parse(localStorage.getItem(key)));
+            if (key.includes(VIDEOKEY)) {
+                output.push(JSON.parse(localStorage.getItem(key)));
+            }
         }
 
-        // Should sort by the video title alphabetically
         output.sort()
         return output;
     }
