@@ -8,6 +8,7 @@ import onSubmit from "./useEffect/onSubmit";
 import onTextChange from "./useEffect/onTextChange";
 import Annotations from "./Components/Annotations";
 import onPageChange from "./useEffect/onPageChange";
+import onCtrlEnter from "./useEffect/onCtrlEnter";
 
 const Popup = () => {
 	const [md, setmd] = useState(null);
@@ -51,8 +52,11 @@ const Popup = () => {
 	// Submit annotation entry
 	function handleSubmit(e) {
 		e.preventDefault();
-		sendMessage(activeTab, { action: "currentTime" }, (res, error) => { setTimeStamp(res) });
+		sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) });
 	}
+
+	// Listen to keyboard presses
+	onCtrlEnter(() => { sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) }) });
 
 	return (
 		<>
@@ -60,16 +64,14 @@ const Popup = () => {
 			<div className="App" style={ window_size }>
 				<header className="App-header">
 					<p>
-						Add a note for {videoTitle}
+						Add a note for { videoTitle }  
 					</p>
 					<span>
 						<button onClick={() => {
-							sendMessage(activeTab, { action: "toggle" }, (res, err) => { });
+							sendMessage(activeTab, { action: "toggle" }, (r) => { });
 						}}>Toggle</button>
 						<button onClick={() => {
 							md.createBlob();
-
-							// Delete everything for this specific YouTube video
 							storage.deleteNote(currentURL);
 						}}>Download</button>
 						<button onClick={() => {

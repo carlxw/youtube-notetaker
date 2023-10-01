@@ -11,3 +11,8 @@
     * download notes from there
     * delete notes from there
     * any other config settings
+
+* keyboard support
+    * easy to add new notes through keyboard shortcut
+    * add ability to control rte through keyboard shortcuts
+    * can fix problems with fullscreen?

@@ -7,7 +7,7 @@ export default function onSubmit(
 ) {
     useEffect(() => {
         // There may be a bug here
-        if (timeStamp !== 0) {
+        if (timeStamp !== 0 && entryBody !== "" && entryTitle !== "") {
             md.push(entryTitle, entryBody, timeStamp);
             setEntryTitle("");
             setEntryBody("");
