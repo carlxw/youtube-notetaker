@@ -80,9 +80,11 @@ const Popup = () => {
 						}}>Print</button>
 						<button onClick={() => {
 							if (md.mdcontent.length === 0) {
-								sendMessage(activeTab, { action: "alert", message: "You have no notes for this YouTube video" }, () => { });
+								sendMessage(activeTab, { action: "alert", message: "You have no notes for this YouTube video" }, () => {});
 							} else {
-								sendMessage(activeTab, { action: "changeURL", url: "https://www.google.ca" }, () => { });
+								let index = md.mdcontent.length - 1;
+								let lastEntry = md.generateURL(md.mdcontent[index]);
+								sendMessage(activeTab, { action: "changeURL", url: lastEntry }, () => {});
 							}
 							window.close();
 						}}>Go To Last</button>

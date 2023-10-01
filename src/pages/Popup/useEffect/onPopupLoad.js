@@ -25,7 +25,6 @@ export default function onPopupLoad(
 				const parsedDataMd = storage.getNote(url);
 				if (parsedDataMd) {
 					console.log("Restoring Markdown from previous session...");
-					console.log(parsedDataMd);
 
 					setmd(new Markdown(parsedDataMd.ytTitle, parsedDataMd.yturl, parsedDataMd.mdcontent));
 					// storage.clearAllNotes(); // Rework this to delete a specific one by url
@@ -38,7 +37,6 @@ export default function onPopupLoad(
 				const parsedDataText = storage.getText();
 				if (parsedDataText) {
 					console.log("Restoring text from previous session...");
-					console.log(parsedDataText);
 
 					setEntryTitle(parsedDataText.title);
 					setEntryBody(parsedDataText.body);
