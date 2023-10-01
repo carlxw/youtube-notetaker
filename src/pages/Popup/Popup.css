@@ -1,12 +1,11 @@
 .App {
-  position: absolute;
+  position: relative;
   top: 0px;
   bottom: 0px;
   left: 0px;
   right: 0px;
   text-align: center;
   height: 100%;
-  width: 100%;
   padding: 10px;
   background-color: #282c34;
 }
@@ -19,10 +18,4 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
-
-html {
-  height: 600px;
-  width: 400px;
-  overflow: hidden;
 }

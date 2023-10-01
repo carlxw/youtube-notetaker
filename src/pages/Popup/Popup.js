@@ -7,6 +7,7 @@ import onPopupLoad from "./useEffect/onPopupLoad";
 import onSubmit from "./useEffect/onSubmit";
 import onTextChange from "./useEffect/onTextChange";
 import Annotations from "./Components/Annotations";
+import onPageChange from "./useEffect/onPageChange";
 
 const Popup = () => {
 	const [md, setmd] = useState(null);
@@ -18,6 +19,7 @@ const Popup = () => {
 	const [entryBody, setEntryBody] = useState("");
 	const [choice, setChoice] = useState(false);
 	const [textMode, setTextMode] = useState(true);
+	const [window_size, setSize] = useState({ height: "260px", width: "300px" });
 
 	// Get the tab that the user is currently on, to run once
 	onPopupLoad(setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody)
@@ -27,6 +29,9 @@ const Popup = () => {
 
 	// Whenever one of the text fields have been edited
 	onTextChange(entryTitle, entryBody);
+
+	// Whenever the user switches between the text entry vs annotation view
+	onPageChange(textMode, setSize);
 
 	// When user chooses a confirm action. Functionality is unknown as the popup closes. May remove.
 	useEffect(() => {
@@ -52,7 +57,7 @@ const Popup = () => {
 	return (
 		<>
 			{currentURL.includes("www.youtube.com/watch") ?
-			<div className="App">
+			<div className="App" style={ window_size }>
 				<header className="App-header">
 					<p>
 						Add a note for {videoTitle}
