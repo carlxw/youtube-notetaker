@@ -48,10 +48,14 @@ class Markdown {
         let output = `# [${ this.ytTitle }](${ this.yturl })\n\n`;
         output += `<!---=================================================--->\n\n`;
         this.mdcontent.forEach((x) => {
-            output += `## [[${ this._secondsToTimeString(x.timeStamp) }]](${ this.yturl }&t=${ x.timeStamp }s) ${ x.title }\n${ x.content }\n\n`;
+            output += `## [[${ this._secondsToTimeString(x.timeStamp) }]](${this.generateURL(x)}) ${ x.title }\n${ x.content }\n\n`;
             output += `<!---=================================================--->\n\n`;
         });
         return output;
+    }
+
+    generateURL(mdentry: MdEntry): string {
+        return `${ this.yturl }&t=${ mdentry.timeStamp }s`;
     }
 
     _secondsToTimeString(x: number) {
@@ -84,7 +88,6 @@ class Markdown {
         throw("Item not found in array");
     } 
 
-    
     removeID(id: number): void {
         for (let i = 0; i < this.mdcontent.length; i++) {
             if (this.mdcontent[i].id === id) {

@@ -39,6 +39,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         alert(request.message);
     }
 
+    else if(request.action === "changeURL") {
+        window.location.href = request.url;
+    }
+
     try {
         sendResponse("Success");
     } catch {

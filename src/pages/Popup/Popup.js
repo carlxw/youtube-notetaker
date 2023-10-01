@@ -38,7 +38,7 @@ const Popup = () => {
 					console.log(parsedDataMd);
 		
 					setmd(new Markdown(parsedDataMd.ytTitle, parsedDataMd.yturl, parsedDataMd.mdcontent));
-					storage.clearAllNotes(); // Rework this to delete a specific one by url
+					// storage.clearAllNotes(); // Rework this to delete a specific one by url
 				} else {
 					console.log("New Markdown session has been created");
 					setmd(new Markdown(title, url));
@@ -76,6 +76,7 @@ const Popup = () => {
 
 			console.log("Setting data to local storage");
 			storage.setNote(serializedData, currentURL);
+			window.close();
 		}
 	}, [timeStamp]);
 
@@ -93,8 +94,6 @@ const Popup = () => {
 
 	// When user chooses a confirm action. Functionality is unknown as the popup closes. May remove.
 	useEffect(() => {
-		console.log(`The user chose ${choice}`);
-
 		if (choice && md.mdcontent.length !== 0) {
 			md.pop();
 
@@ -136,20 +135,25 @@ const Popup = () => {
 							<button onClick={() => {
 								storage.clearAllNotes();
 							}}>Clear</button>
-							<button onClick={() => {
-								sendMessage(
-									activeTab, 
-									{ action: "confirm", message: "This is a test confirm" }, 
-									(res, err) => {
-										setChoice(res);
-									}
-								);
-							}}>Delete Last</button>
 						</span>
 						
-						<button onClick={() => {
-							md.print();
-						}}>Print</button>
+						<span>
+							<button onClick={() => {
+								if (md.mdcontent.length === 0) {
+									console.log("You have not written any notes for this video");
+								} else {
+									md.print();
+								}
+							}}>Print</button>
+							<button onClick={() => {
+								if (md.mdcontent.length === 0) {
+									sendMessage(activeTab, { action: "alert", message: "You have no notes for this YouTube video" }, () => {});
+								} else {
+									sendMessage(activeTab, { action: "changeURL", url: "https://www.google.ca" }, () => {});
+								}
+								window.close();
+							}}>Go To Last</button>
+						</span>
 
 						<TextField 
 							handleSubmit={ handleSubmit }
