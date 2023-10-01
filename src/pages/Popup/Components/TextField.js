@@ -11,6 +11,7 @@ const TextField = ({ handleSubmit, title, body }) => {
                 <button onClick={() => richText("list_point", body)}>*</button>
                 <button onClick={() => richText("list_number", body)}><code>1.</code></button>
             </span>
+            <br />
             <span>
                 <button onClick={() => richText("latex_inline", body)}><code>LaTeX Inline</code></button>
                 <button onClick={() => richText("latex_block", body)}><code>LaTeX Block</code></button>
