@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Markdown from "../../modules/Markdown";
 import './Options.css';
 import storage from '../../modules/LocalStorage';
 
@@ -7,15 +8,21 @@ const Options = () => {
     const [notes, setNotes] = useState([]);
 
     useEffect(() => {
-        setNotes(storage.getVideoNotes());
+        let a = storage.getVideoNotes();
+        console.log(a);
+        let temp = a.map((x, index) => (
+            <div className="yt_menu_list" key={index}>
+                <a href={x.yturl} target="_blank" rel="noopener" >{x.ytTitle}</a>
+            </div>
+        ));
+        console.log(temp);
+        setNotes(temp);
     }, []);
 
     return (
         <div className="OptionsContainer">
-            <h1>List of Notes for URL</h1>
             <h1>List of Notes</h1>
-            { notes }
-            <h1>Config Settings</h1>
+            {notes}
         </div>
     );
 };

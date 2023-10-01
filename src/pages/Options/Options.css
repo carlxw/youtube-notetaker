@@ -6,4 +6,10 @@
     align-items: center;
     justify-content: center;
     flex-direction: column; 
+    gap: 24px;
+    text-align: center;
+}
+
+.yt_menu_list {
+    max-width: 80%;
 }

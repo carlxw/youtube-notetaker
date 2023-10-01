@@ -125,11 +125,12 @@ class LocalStorage {
         let output = [];
         for (let i = 0; i < localStorage.length; i++) {
             let key = localStorage.key(i);
-            if (key.includes(VIDEOKEY)) output.push(localStorage.getItem(key));
+            if (key.includes(VIDEOKEY)) output.push(JSON.parse(localStorage.getItem(key)));
         }
 
         // Should sort by the video title alphabetically
-        return output.sort();
+        output.sort()
+        return output;
     }
 
     /**
