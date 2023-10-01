@@ -48,7 +48,7 @@ class Markdown {
         let output = `# [${ this.ytTitle }](${ this.yturl })\n\n`;
         output += `<!---=================================================--->\n\n`;
         this.mdcontent.forEach((x) => {
-            output += `## [[${ this._secondsToTimeString(x.timeStamp) }]](${this.generateURL(x)}) ${ x.title }\n${ x.content }\n\n`;
+            output += `## [[${ this.secondsToTimeString(x.timeStamp) }]](${this.generateURL(x)}) ${ x.title }\n${ x.content }\n\n`;
             output += `<!---=================================================--->\n\n`;
         });
         return output;
@@ -58,7 +58,7 @@ class Markdown {
         return `${ this.yturl }&t=${ mdentry.timeStamp }s`;
     }
 
-    _secondsToTimeString(x: number) {
+    secondsToTimeString(x: number) {
         const hours = Math.floor(x / 3600);
         const minutes = Math.floor((x % 3600) / 60);
         const seconds = x % 60;

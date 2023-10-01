@@ -6,6 +6,7 @@ import { sendMessage, store } from "../../modules/ChromeHelper";
 import onPopupLoad from "./useEffect/onPopupLoad";
 import onSubmit from "./useEffect/onSubmit";
 import onTextChange from "./useEffect/onTextChange";
+import Annotations from "./Components/Annotations";
 
 const Popup = () => {
 	const [md, setmd] = useState(null);
@@ -16,6 +17,7 @@ const Popup = () => {
 	const [entryTitle, setEntryTitle] = useState("");
 	const [entryBody, setEntryBody] = useState("");
 	const [choice, setChoice] = useState(false);
+	const [textMode, setTextMode] = useState(true);
 
 	// Get the tab that the user is currently on, to run once
 	onPopupLoad(setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody)
@@ -66,8 +68,8 @@ const Popup = () => {
 							storage.deleteNote(currentURL);
 						}}>Download</button>
 						<button onClick={() => {
-							storage.clearAllNotes();
-						}}>Clear</button>
+							setTextMode(false);
+						}}>See Notes</button>
 					</span>
 
 					<span>
@@ -90,11 +92,16 @@ const Popup = () => {
 						}}>Go To Last</button>
 					</span>
 
-					<TextField
-						handleSubmit={handleSubmit}
-						title={{ value: entryTitle, set: setEntryTitle }}
-						body={{ value: entryBody, set: setEntryBody }}
-					/>
+					{
+						textMode ? 
+						<TextField
+							handleSubmit={handleSubmit}
+							title={{ value: entryTitle, set: setEntryTitle }}
+							body={{ value: entryBody, set: setEntryBody }}
+						/>
+						:
+						<Annotations md={ md } setTextMode={ setTextMode } />
+					}
 				</header>
 			</div>
 
