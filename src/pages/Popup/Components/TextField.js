@@ -3,7 +3,7 @@ import { richText } from "../../../modules/RichTextEditing";
 
 const TextField = ({ handleSubmit, title, body }) => {
     return (
-        <>
+        <div>
             <span>
                 <button onClick={() => richText("bold", body)}><b>B</b></button>
                 <button onClick={() => richText("italic", body)}><i>I</i></button>
@@ -15,22 +15,23 @@ const TextField = ({ handleSubmit, title, body }) => {
                 <button onClick={() => richText("latex_inline", body)}><code>LaTeX Inline</code></button>
                 <button onClick={() => richText("latex_block", body)}><code>LaTeX Block</code></button>
             </span>
+
             <form onSubmit={handleSubmit}>
                 <input
-                    value={title.value}
+                    value={ title.value }
                     onChange={(e) => title.set(e.target.value)}
                     placeholder={"Add your note title here..."}
                 />
                 <textarea
                     id="md_textarea"
-                    value={body.value}
+                    value={ body.value }
                     onChange={(e) => body.set(e.target.value)}
                     placeholder={"Write down any thoughts..."}
                 />
                 <br />
                 <input type="submit" />
             </form>
-        </>
+        </div>
     );
 }
 

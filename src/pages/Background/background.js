@@ -10,7 +10,7 @@ chrome.runtime.onConnect.addListener((port) => {
         port.onDisconnect.addListener(() => {
             chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
                 sendMessage(tab, { action: "play" }, () => {});
-            })
+            });
         });
     }
 });
