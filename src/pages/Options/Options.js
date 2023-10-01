@@ -23,6 +23,11 @@ const Options = () => {
         <div className="OptionsContainer">
             <h1>List of Notes</h1>
             { notes }
+            <button onClick={() => {
+                localStorage.clear();
+                // storage.clearAllNotes();
+                location.reload();
+            }}>Clear All Notes</button>
         </div>
     );
 };
