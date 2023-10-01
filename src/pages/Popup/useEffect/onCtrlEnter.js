@@ -1,14 +1,23 @@
-const onCtrlEnter = (func) => {
-    // Function to handle the key combination
-    function handleKeyPress(event) {
-    	if (event.key === 'Control' && event.key === 'Enter') {
-            // Your code to run when Ctrl + Enter is pressed
-            func();
-        }
-    }
+import { useEffect, useCallback } from "react";
 
-    // Add an event listener to the document
-    document.addEventListener('keydown', handleKeyPress);
+const onCtrlEnter = (func) => {
+	// Handle what happens on key press
+	const handleKeyPress = useCallback((event) => {
+		if (event.ctrlKey && event.key === "Enter") {
+			console.log("Trigger");
+			func();
+		}
+	}, [func]);
+
+	useEffect(() => {
+		// Attach the event listener
+		document.addEventListener('keydown', handleKeyPress);
+
+		// Remove the event listener
+		return () => {
+			document.removeEventListener('keydown', handleKeyPress);
+		};
+	}, [handleKeyPress]);
 }
 
 export default onCtrlEnter;
