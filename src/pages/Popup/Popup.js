@@ -91,7 +91,7 @@ const Popup = () => {
 		storage.setText(serializedData);
 	}, [entryTitle, entryBody]);
 
-	// When user chooses a confirm action
+	// When user chooses a confirm action. Functionality is unknown as the popup closes. May remove.
 	useEffect(() => {
 		console.log(`The user chose ${choice}`);
 
@@ -101,8 +101,10 @@ const Popup = () => {
 			// Serialize only the data needed to recreate the object
 			const serializedData = store(md);
 			storage.setNote(serializedData, currentURL);
-		} else {
-			sendMessage({ action: "alert", message: "You have no notes for this YouTube video" });
+		}
+
+		else if (choice && md.mdcontent.length === 0) {
+			sendMessage(activeTab, { action: "alert", message: "You have no note for this video." }, () => {});
 		}
 	}, [choice]);
 
@@ -123,7 +125,7 @@ const Popup = () => {
 						</p>
 						<span>
 							<button onClick={() => {
-								sendMessage(tab, { action: "toggle" }, (res, err) => {});
+								sendMessage(activeTab, { action: "toggle" }, (res, err) => {});
 							}}>Toggle</button>
 							<button onClick={() => {
 								md.createBlob();
@@ -145,9 +147,9 @@ const Popup = () => {
 							}}>Delete Last</button>
 						</span>
 						
-						<button onClick={{
-							// Option the options page here
-						}}>Options</button>
+						<button onClick={() => {
+							md.print();
+						}}>Print</button>
 
 						<TextField 
 							handleSubmit={ handleSubmit }

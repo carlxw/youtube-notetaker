@@ -39,11 +39,17 @@ class Markdown {
         URL.revokeObjectURL(blobUrl);
     }
 
+    print() {
+        console.log(this.arrayOutput());
+    }
+
     arrayOutput(): string {
         // Maybe make the H1 take the user to when time is 0 seconds?
         let output = `# [${ this.ytTitle }](${ this.yturl })\n\n`;
+        output += `<!---=================================================--->\n\n`;
         this.mdcontent.forEach((x) => {
             output += `## [[${ this._secondsToTimeString(x.timeStamp) }]](${ this.yturl }&t=${ x.timeStamp }s) ${ x.title }\n${ x.content }\n\n`;
+            output += `<!---=================================================--->\n\n`;
         });
         return output;
     }
