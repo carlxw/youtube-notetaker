@@ -35,6 +35,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         sendResponse(choice);
     }
 
+    else if (request.action === "alert") {
+        alert(request.message);
+    }
+
     try {
         sendResponse("Success");
     } catch {

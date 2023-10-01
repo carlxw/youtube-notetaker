@@ -8,3 +8,7 @@ export function sendMessage(tab, message, callback) {
         else callback(null, "No response received from the tab.");
     });
 }
+
+export function store(md) {
+    return { ytTitle: md.ytTitle, yturl: md.yturl, mdcontent: md.mdcontent };
+}

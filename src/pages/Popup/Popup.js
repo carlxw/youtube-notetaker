@@ -3,7 +3,7 @@ import TextField from "./Components/TextField";
 import NotOnYouTube from "./Components/NotOnYouTube";
 import Markdown from "../../modules/Markdown";
 import storage from "../../modules/LocalStorage";
-import { getVideoTitle, sendMessage } from "../../modules/ChromeHelper";
+import { getVideoTitle, sendMessage, store } from "../../modules/ChromeHelper";
 
 const Popup = () => {
 	const [md, setmd] = useState(null);
@@ -72,11 +72,7 @@ const Popup = () => {
 			storage.clearText();
 
 			// Serialize only the data needed to recreate the object
-			const serializedData = {
-				ytTitle: md.ytTitle,
-				yturl: md.yturl,
-				mdcontent: md.mdcontent
-			};
+			const serializedData = store(md);
 
 			console.log("Setting data to local storage");
 			storage.setNote(serializedData, currentURL);
@@ -97,7 +93,17 @@ const Popup = () => {
 
 	// When user chooses a confirm action
 	useEffect(() => {
-		console.log(`The user chose ${choice}`)
+		console.log(`The user chose ${choice}`);
+
+		if (choice && md.mdcontent.length !== 0) {
+			md.pop();
+
+			// Serialize only the data needed to recreate the object
+			const serializedData = store(md);
+			storage.setNote(serializedData, currentURL);
+		} else {
+			sendMessage({ action: "alert", message: "You have no notes for this YouTube video" });
+		}
 	}, [choice]);
 
 	// Submit annotation entry
@@ -122,11 +128,11 @@ const Popup = () => {
 							<button onClick={() => {
 								md.createBlob();
 
-								// Need to change this to only clear specific data
-								localStorage.clear();
+								// Delete everything for this specific YouTube video
+								storage.deleteNote(currentURL);
 							}}>Download</button>
 							<button onClick={() => {
-								localStorage.clear();
+								storage.clearAllNotes();
 							}}>Clear</button>
 							<button onClick={() => {
 								sendMessage(
