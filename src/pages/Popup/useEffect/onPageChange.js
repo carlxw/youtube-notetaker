@@ -5,7 +5,7 @@ const onPageChange = (textMode, setSize) => {
         if (!textMode) {
             setSize({ height: "600px", width: "400px" });
         } else {
-            setSize({ height: "260px", width: "300px" });
+            setSize({ height: "400px", width: "350px" });
         }
     }, [textMode]);
 }

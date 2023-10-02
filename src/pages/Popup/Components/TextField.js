@@ -19,6 +19,7 @@ const TextField = ({ handleSubmit, title, body }) => {
 
             <form onSubmit={handleSubmit}>
                 <input
+                    id="note_title_field"
                     value={ title.value }
                     onChange={(e) => title.set(e.target.value)}
                     placeholder={"Add your note title here..."}
