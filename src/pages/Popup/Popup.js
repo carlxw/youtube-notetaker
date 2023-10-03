@@ -52,8 +52,8 @@ const Popup = () => {
 	// Submit annotation entry
 	function handleSubmit(e) {
 		e.preventDefault();
-		if (entryTitle === "" && entryBody === "") {
-			sendMessage(activeTab, { action: "alert", message: "You have not written anything down"}, () => {});
+		if (entryTitle === "" || entryBody === "") {
+			sendMessage(activeTab, { action: "alert", message: "You have an input field left blank."}, () => {});
 		} else sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) });
 	}
 
