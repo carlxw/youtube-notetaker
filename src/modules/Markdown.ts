@@ -72,6 +72,9 @@ class Markdown {
 
     push(title: string, content: string, timeStamp: number): void {
         this.mdcontent.push(new MdEntry(this.mdcontent.length, title, content, timeStamp));
+
+        // Sort the array such that it is increasing in timestamp
+        this.mdcontent.sort((a, b) => a.timeStamp - b.timeStamp);
     }
 
     pop() {
