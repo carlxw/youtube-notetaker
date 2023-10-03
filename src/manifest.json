@@ -25,5 +25,13 @@
   ],
   "permissions": [
     "activeTab"
-  ]
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Q",
+        "mac": "Ctrl+Q"
+      }
+    }
+  }
 }

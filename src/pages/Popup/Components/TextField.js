@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { richText } from "../../../modules/RichTextEditing";
 
 const TextField = ({ handleSubmit, title, body }) => {
+    useEffect(() => {
+        // Activate the title text field on component mount
+		document.getElementById("note_title_field").focus();
+    }, []);
+
     return (
         <div>
             <span>
