@@ -8,7 +8,7 @@ import onSubmit from "./useEffect/onSubmit";
 import onTextChange from "./useEffect/onTextChange";
 import Annotations from "./Components/Annotations";
 import onPageChange from "./useEffect/onPageChange";
-import onCtrlEnter from "./useEffect/onCtrlEnter";
+import onKeyCtrl from "./useEffect/onKeyCtrl";
 
 const Popup = () => {
 	const [md, setmd] = useState(null);
@@ -52,11 +52,13 @@ const Popup = () => {
 	// Submit annotation entry
 	function handleSubmit(e) {
 		e.preventDefault();
-		sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) });
+		if (entryTitle === "" && entryBody === "") {
+			sendMessage(activeTab, { action: "alert", message: "You have not written anything down"}, () => {});
+		} else sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) });
 	}
 
-	// Listen to keyboard presses
-	onCtrlEnter(() => { sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) }) });
+	// Ctrl Enter to submit an annotation
+	onKeyCtrl("Enter", () => { sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) }) });
 
 	return (
 		<>
