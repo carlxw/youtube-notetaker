@@ -1,11 +1,33 @@
 import React, { useEffect } from "react";
-import { richText } from "../../../modules/RichTextEditing";
+import { getSelectionText, richText } from "../../../modules/RichTextEditing";
+import onKeyCtrl from "../useEffect/onKeyCtrl";
 
 const TextField = ({ handleSubmit, title, body }) => {
-    useEffect(() => {
-        // Activate the title text field on component mount
-		document.getElementById("note_title_field").focus();
-    }, []);
+    // Activate the title text field on component mount
+    useEffect(() => { document.getElementById("note_title_field").focus() }, []);
+
+    // Keyboard shortcuts for BIU
+    onKeyCtrl("b", () => { handleKeys("b") });
+    onKeyCtrl("i", () => { handleKeys("i") });
+    onKeyCtrl("u", () => { handleKeys("u") });
+
+    function handleKeys(key) {
+        // Insert elements at the endpoints of the highlighted text
+        if (!getSelectionText()) return;
+
+        switch (key) {
+            case "b": 
+                richText("bold", body);
+                break;
+            case "i":
+                richText("italic", body);
+                break;
+            case "u":
+                richText("underline", body);
+                break;
+            default: return;
+        }
+    }
 
     return (
         <div>

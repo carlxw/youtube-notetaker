@@ -43,7 +43,11 @@ export default function onPopupLoad(
 				}
 
 				// Pause the video as the user adds an annotation
-				sendMessage(currentTab, { action: "pause" }, () => { });
+				try {
+					sendMessage(currentTab, { action: "pause" }, () => {});
+				} catch {
+					console.log("Tab not connected");
+				}
 			}
 		});
 	}, []);

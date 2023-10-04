@@ -73,7 +73,7 @@ function insertAtBreakline(fulltext, index, element) {
     return fulltext;
 }
 
-function richText(action, content) {
+function richText(action, content, keyMode = false) {
     // User has text highlighted, only do something to the highlighted
     let text = getSelectionText();
     let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
@@ -151,4 +151,4 @@ function richText(action, content) {
     }
 }
 
-export { richText };
+export { richText, getSelectionText };

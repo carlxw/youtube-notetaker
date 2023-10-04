@@ -1,12 +1,11 @@
 import { useEffect, useCallback } from "react";
 
-const onKeyCtrl = (key, func) => {
+const onKeyCtrl = (key, action) => {
 	// Handle what happens on key press
 	const handleKeyPress = useCallback((event) => {
-		if (event.ctrlKey && event.key === key) {
-			func();
-		}
-	}, [func]);
+		event.preventDefault();
+		if (event.ctrlKey && event.key === key) action();
+	}, [action]);
 
 	useEffect(() => {
 		// Attach the event listener
