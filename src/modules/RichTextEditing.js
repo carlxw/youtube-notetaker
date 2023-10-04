@@ -1,10 +1,15 @@
-// https://stackoverflow.com/questions/5379120/get-the-highlighted-selected-text
-function getSelectionText() {
+/**
+ * https://stackoverflow.com/questions/5379120/get-the-highlighted-selected-text
+ * 
+ * @param {string} bodyText Ensures that the selected text is in the body, and not title
+ * @returns String if the selection is made in the body
+ */
+function getSelectionText(bodyText = "") {
     var text = "";
     if (window.getSelection) text = window.getSelection().toString();
     else if (document.selection && document.selection.type != "Control") text = document.selection.createRange().text;
 
-    return text.trim();
+    return bodyText.indexOf(text.trim()) === -1 ? null : text.trim();
 }
 
 // Returns the starting position of what has been highlighted
@@ -75,7 +80,7 @@ function insertAtBreakline(fulltext, index, element) {
 
 function richText(action, content, keyMode = false) {
     // User has text highlighted, only do something to the highlighted
-    let text = getSelectionText();
+    let text = getSelectionText(content.value);
     let index = [getHighlightedIndex(), getHighlightedIndex() + text.length];
     let element;
 

@@ -3,8 +3,10 @@ import { useEffect, useCallback } from "react";
 const onKeyCtrl = (key, action) => {
 	// Handle what happens on key press
 	const handleKeyPress = useCallback((event) => {
-		event.preventDefault();
-		if (event.ctrlKey && event.key === key) action();
+		if (event.ctrlKey && event.key === key) {
+			event.preventDefault();
+			action();
+		}
 	}, [action]);
 
 	useEffect(() => {

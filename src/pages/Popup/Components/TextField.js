@@ -13,7 +13,7 @@ const TextField = ({ handleSubmit, title, body }) => {
 
     function handleKeys(key) {
         // Insert elements at the endpoints of the highlighted text
-        if (!getSelectionText()) return;
+        if (!getSelectionText(body.value)) return;
 
         switch (key) {
             case "b": 
