@@ -31,6 +31,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     else if (request.action === "unmute") video.muted = false;
     
     else if (request.action === "toggle") video.paused ? video.play() : video.pause();
+    
+    else if (request.action === "setTime") {
+        video.currentTime = request.time;
+
+        // Remove line if not helpful
+        if (!video.paused) video.pause();
+    }
 
     // Tab actions ==============================================================
     else if (request.action === "confirm") {
