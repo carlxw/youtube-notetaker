@@ -157,3 +157,4 @@ function richText(action, content, keyMode = false) {
 }
 
 export { richText, getSelectionText };
+// https://markdowntohtml.com/

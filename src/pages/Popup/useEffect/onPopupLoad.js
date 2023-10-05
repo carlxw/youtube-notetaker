@@ -47,6 +47,7 @@ export default function onPopupLoad(
 					sendMessage(currentTab, { action: "pause" }, () => {});
 				} catch {
 					console.log("Tab not connected");
+					window.close();
 				}
 			}
 		});

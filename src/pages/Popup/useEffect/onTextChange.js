@@ -8,8 +8,8 @@ export default function onTextChange(
         if (entryTitle === "" && entryBody === "") return;
     
         const serializedData = {
-            title: entryTitle,
-            body: entryBody
+            title: entryTitle.trim(),
+            body: entryBody.trim()
         }
     
         storage.setText(serializedData);

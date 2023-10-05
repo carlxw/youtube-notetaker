@@ -1,21 +1,33 @@
 import React, { useEffect, useState } from "react";
 
-const Annotations = ({md, setTextMode}) => {
+const Annotations = ({md, setmd, setTextMode}) => {
     const [notes, setNotes] = useState([]);
+
+    function deleteAnnotation(id) {
+        // Update md object
+        md.removeID(id);
+        setmd(md);
+    }
     
     useEffect(() => {
-        setNotes(md.mdcontent.map((x) => (
-            <div>
-                <p>
-                    [{ md.secondsToTimeString(x.timeStamp) }] { x.title }
-                </p>
-                <p>
-                    { x.content.substring(0, 20) + "..." }
-                </p>
-                <br />
-            </div>
-        )));
+        if (md.mdcontent.length !== 0) {
+            setNotes(md.mdcontent.map((x, idx) => (
+                <div key={ `annotation${ idx }` }>
+                    <p>
+                        [{ md.secondsToTimeString(x.timeStamp) }] { x.title }
+                    </p>
+                    <p>
+                        { x.content.substring(0, 20) + "..." }
+                    </p>
+                    <button onClick={() => deleteAnnotation(x.id)}>
+                        Delete
+                    </button>
+                    <br />
+                </div>
+            )));
+        }
     }, []);
+
     return (
         <>
             <button onClick={() => setTextMode(true)}>Return</button>
