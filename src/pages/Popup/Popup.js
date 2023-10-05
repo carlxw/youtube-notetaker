@@ -97,8 +97,8 @@ const Popup = () => {
 										sendMessage(activeTab, { action: "alert", message: "You have no notes for this YouTube video" }, () => {});
 									} else {
 										let index = md.mdcontent.length - 1;
-										let lastEntry = md.generateURL(md.mdcontent[index]);
-										sendMessage(activeTab, { action: "changeURL", url: lastEntry }, () => {});
+										let lastts = md.mdcontent[index].timeStamp;
+										sendMessage(activeTab, { action: "setTime", time: lastts }, () => {});
 									}
 									window.close();
 								}}>Go To Last</button>
