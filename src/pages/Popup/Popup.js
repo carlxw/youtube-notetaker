@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TextField from "./Components/TextField";
 import NotOnYouTube from "./Components/NotOnYouTube";
 import storage from "../../modules/LocalStorage";
-import { sendMessage, store } from "../../modules/ChromeHelper";
+import { sendMessage } from "../../modules/ChromeHelper";
 import onPopupLoad from "./useEffect/onPopupLoad";
 import onSubmit from "./useEffect/onSubmit";
 import onTextChange from "./useEffect/onTextChange";
@@ -112,7 +112,7 @@ const Popup = () => {
 
 						:
 
-						<Annotations md={ md } setTextMode={ setTextMode } />
+						<Annotations md={ md } setTextMode={ setTextMode } currentURL={ currentURL }/>
 					}
 				</header>
 			</div>
