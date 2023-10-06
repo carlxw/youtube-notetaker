@@ -4,8 +4,12 @@ export function getVideoTitle(tabTitle) {
 
 export function sendMessage(tab, message, callback) {
     chrome.tabs.sendMessage(tab.id, message, {}, function (res) {
+        if (chrome.runtime.lastError) {
+            // Handle the error here
+            console.error(chrome.runtime.lastError);
+            console.log("Refresh the page!!!");
+        }
         if (res) callback(res, null);
-        else callback(null, "No response received from the tab.");
     });
 }
 

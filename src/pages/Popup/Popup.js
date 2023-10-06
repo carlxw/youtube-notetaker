@@ -18,7 +18,6 @@ const Popup = () => {
 	const [currentURL, setCurrentURL] = useState("");
 	const [entryTitle, setEntryTitle] = useState("");
 	const [entryBody, setEntryBody] = useState("");
-	// const [choice, setChoice] = useState(false);
 	const [textMode, setTextMode] = useState(true);
 	const [window_size, setSize] = useState({});
 
@@ -33,21 +32,6 @@ const Popup = () => {
 
 	// Whenever the user switches between the text entry vs annotation view
 	onPageChange(textMode, setSize);
-
-	// When user chooses a confirm action. Functionality is unknown as the popup closes. May remove.
-	// useEffect(() => {
-	// 	if (choice && md.mdcontent.length !== 0) {
-	// 		md.pop();
-
-	// 		// Serialize only the data needed to recreate the object
-	// 		const serializedData = store(md);
-	// 		storage.setNote(serializedData, currentURL);
-	// 	}
-
-	// 	else if (choice && md.mdcontent.length === 0) {
-	// 		sendMessage(activeTab, { action: "alert", message: "You have no note for this video." }, () => { });
-	// 	}
-	// }, [choice]);
 
 	// Submit annotation entry
 	function handleSubmit(e) {

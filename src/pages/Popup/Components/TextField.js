@@ -44,6 +44,9 @@ const TextField = ({ handleSubmit, title, body }) => {
                 <button onClick={() => richText("latex_block", body)}><code>LaTeX Block</code></button>
             </span>
 
+            <br />
+            <br />
+
             <form onSubmit={handleSubmit}>
                 <input
                     id="note_title_field"

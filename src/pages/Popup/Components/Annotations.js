@@ -17,6 +17,20 @@ const Annotations = ({md, setTextMode, currentURL}) => {
         console.log("Setting data to local storage");
         storage.setNote(serializedData, currentURL);
     }
+
+    function deleteAll() {
+        for (let i = 0; i < md.mdcontent.length; i++) {
+            md.removeID(i);
+        }
+
+        generateArray();
+
+        // Serialize only the data needed to recreate the object
+        const serializedData = store(md);
+
+        console.log("Setting data to local storage");
+        storage.setNote(serializedData, currentURL);
+    }
     
     useEffect(() => {
         generateArray();
@@ -53,6 +67,9 @@ const Annotations = ({md, setTextMode, currentURL}) => {
                         See your video annotations below!
                     </p>
                     { notes }
+                    <button onClick={ deleteAll }>
+                        Delete all
+                    </button>
                 </>
             }
         </>
