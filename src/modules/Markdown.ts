@@ -70,21 +70,33 @@ class Markdown {
         }
     }
 
-    push(title: string, content: string, timeStamp: number): void {
-        this.mdcontent.push(new MdEntry(this.mdcontent.length, title, content, timeStamp));
-
+    sortself(): void {
         // Sort the array such that it is increasing in timestamp
         this.mdcontent.sort((a, b) => a.timeStamp - b.timeStamp);
     }
 
-    pop() {
+    push(title: string, content: string, timeStamp: number): void {
+        this.mdcontent.push(new MdEntry(this.mdcontent.length, title, content, timeStamp));
+        this.sortself();
+    }
+
+    pop(): void {
         this.mdcontent.pop();
+        this._reid();
+    }
+
+    _reid(): void {
+        this.sortself();
+        for (let i = 0; i < this.mdcontent.length; i++) {
+            this.mdcontent[i].id = i;
+        }
     }
 
     removeTitle(title: string): void {
         for (let i = 0; i < this.mdcontent.length; i++) {
             if (this.mdcontent[i].title === title) {
                 this.mdcontent.splice(i, 1);
+                this._reid();
                 return;
             }
         }
@@ -95,6 +107,7 @@ class Markdown {
         for (let i = 0; i < this.mdcontent.length; i++) {
             if (this.mdcontent[i].id === id) {
                 this.mdcontent.splice(i, 1);
+                this._reid();
                 return;
             }
         }

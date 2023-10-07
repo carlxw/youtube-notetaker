@@ -1,41 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { store } from "../../../modules/ChromeHelper";
+import { mdToStorage, store } from "../../../modules/ChromeHelper";
 import storage from "../../../modules/LocalStorage";
 
 const Annotations = ({md, setTextMode, currentURL}) => {
     const [notes, setNotes] = useState([]);
 
     function deleteAnnotation(id) {
-        // Update md object
         md.removeID(id);
-
         generateArray();
-        
-        // Serialize only the data needed to recreate the object
-        const serializedData = store(md);
-    
-        console.log("Setting data to local storage");
-        storage.setNote(serializedData, currentURL);
+        mdToStorage(md, currentURL);
     }
 
     function deleteAll() {
-        for (let i = 0; i < md.mdcontent.length; i++) {
+        for (let i = md.mdcontent.length - 1; i >= 0; i--) {
             md.removeID(i);
         }
 
         generateArray();
-
-        // Serialize only the data needed to recreate the object
-        const serializedData = store(md);
-
-        console.log("Setting data to local storage");
-        storage.setNote(serializedData, currentURL);
+        storage.deleteNote(currentURL);
     }
     
-    useEffect(() => {
-        generateArray();
-    }, []);
-
     function generateArray() {
         if (md.mdcontent.length !== 0) {
             setNotes(md.mdcontent.map((x, idx) => (
@@ -54,6 +38,10 @@ const Annotations = ({md, setTextMode, currentURL}) => {
             )));
         } else setNotes([]);
     }
+    
+    useEffect(() => {
+        generateArray();
+    }, []);
 
     return (
         <>

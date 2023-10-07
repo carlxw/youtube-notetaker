@@ -1,3 +1,5 @@
+import storage from "./LocalStorage";
+
 export function getVideoTitle(tabTitle) {
     return tabTitle.split(" - YouTube")[0];
 }
@@ -15,4 +17,12 @@ export function sendMessage(tab, message, callback) {
 
 export function store(md) {
     return { ytTitle: md.ytTitle, yturl: md.yturl, mdcontent: md.mdcontent };
+}
+
+export function mdToStorage(md, url) {
+    // Serialize only the data needed to recreate the object
+    const serializedData = store(md);
+        
+    console.log("Setting data to local storage");
+    storage.setNote(serializedData, url);
 }

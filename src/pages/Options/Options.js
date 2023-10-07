@@ -27,13 +27,15 @@ const Options = () => {
     return (
         <div className="OptionsContainer">
             <h1>List of Notes</h1>
-            { notes }
             { notes.length === 0 ? 
                 <p>
                     No notes here! Go to a YouTube video and write a note!
                 </p>
                 :
-                <button onClick={ deleteNotes }>Clear All Notes</button>
+                <>
+                    { notes }
+                    <button onClick={ deleteNotes }>Clear All Notes</button>
+                </>
             }
         </div>
     );
