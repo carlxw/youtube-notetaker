@@ -26,3 +26,7 @@ textarea {
 } #note_title_field {
   width: 300px;
 }
+
+#annotation_timestamp:hover {
+  cursor: pointer;
+}

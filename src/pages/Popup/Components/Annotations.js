@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { mdToStorage, store } from "../../../modules/ChromeHelper";
+import { mdToStorage, sendMessage } from "../../../modules/ChromeHelper";
 import storage from "../../../modules/LocalStorage";
 
-const Annotations = ({md, setTextMode, currentURL}) => {
+const Annotations = ({md, setTextMode, currentURL, activeTab}) => {
     const [notes, setNotes] = useState([]);
 
     function deleteAnnotation(id) {
@@ -19,12 +19,16 @@ const Annotations = ({md, setTextMode, currentURL}) => {
         generateArray();
         storage.deleteNote(currentURL);
     }
+
+    function toTimestamp(ts) {
+        sendMessage(activeTab, { action: "setTime", time: ts }, () => {});
+    }
     
     function generateArray() {
         if (md.mdcontent.length !== 0) {
             setNotes(md.mdcontent.map((x, idx) => (
                 <div key={ `annotation${ idx }` }>
-                    <p>
+                    <p id="annotation_timestamp" onClick={() => toTimestamp(x.timeStamp)}>
                         [{ md.secondsToTimeString(x.timeStamp) }] { x.title }
                     </p>
                     <p>

@@ -96,7 +96,7 @@ const Popup = () => {
 
 						:
 
-						<Annotations md={ md } setTextMode={ setTextMode } currentURL={ currentURL }/>
+						<Annotations md={ md } setTextMode={ setTextMode } currentURL={ currentURL } activeTab={ activeTab } />
 					}
 				</header>
 			</div>
