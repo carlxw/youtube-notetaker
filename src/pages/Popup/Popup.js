@@ -20,6 +20,7 @@ const Popup = () => {
 	const [entryBody, setEntryBody] = useState("");
 	const [textMode, setTextMode] = useState(true);
 	const [window_size, setSize] = useState({});
+	const [isPlaying, setIsPlaying] = useState(false);
 
 	// Get the tab that the user is currently on, to run once
 	onPopupLoad(setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody)
@@ -58,7 +59,8 @@ const Popup = () => {
 							<span>
 								<button onClick={() => {
 									sendMessage(activeTab, { action: "toggle" }, (r) => { });
-								}}>Toggle</button>
+									setIsPlaying(!isPlaying);
+								}}>{ isPlaying ? "Pause" : "Play" }</button>
 								<button onClick={() => {
 									md.createBlob();
 									storage.deleteNote(currentURL);
@@ -69,13 +71,13 @@ const Popup = () => {
 							</span>
 
 							<span>
-								<button onClick={() => {
+								{/* <button onClick={() => {
 									if (md.mdcontent.length === 0) {
 										console.log("You have not written any notes for this video");
 									} else {
 										md.print();
 									}
-								}}>Print</button>
+								}}>Print</button> */}
 								<button onClick={() => {
 									if (md.mdcontent.length === 0) {
 										sendMessage(activeTab, { action: "alert", message: "You have no notes for this YouTube video" }, () => {});
