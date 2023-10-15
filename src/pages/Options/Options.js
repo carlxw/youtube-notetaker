@@ -8,14 +8,24 @@ const Options = () => {
 
     // Load all notes data on when the page loads
     useEffect(() => {
-        setNotes(storage.getVideoNotes().map((x, index) => (
-            <div className="yt_menu_list" key={index}>
-                <a href={ x.yturl } target="_blank" rel="noopener">{ x.ytTitle }</a>
-            </div>
-        )));
+        loadNotes();
     }, []);
 
-    function deleteNotes() {
+    function deleteNote(url) {
+        storage.deleteNote(url);
+        loadNotes();
+    }
+
+    function loadNotes() {
+        setNotes(storage.getVideoNotes().map((x, index) => (
+            <div className="yt_menu_list" key={ index }>
+                <a href={ x.yturl } target="_blank" rel="noopener">{ x.ytTitle }</a>
+                <button onClick={ () => deleteNote(x.yturl) }>Delete</button>
+            </div>
+        )));
+    }
+
+    function deleteAllNotes() {
         let choice = confirm("Are you sure you want to delete all video notes?");
         if (choice) {
             storage.clearAllNotes();
@@ -23,7 +33,6 @@ const Options = () => {
         }
     }
 
-    // Eventually implement a feature to delete specific notes in a list
     return (
         <div className="OptionsContainer">
             <h1>List of Notes</h1>
@@ -34,7 +43,7 @@ const Options = () => {
                 :
                 <>
                     { notes }
-                    <button onClick={ deleteNotes }>Clear All Notes</button>
+                    <button onClick={ deleteAllNotes }>Clear All Notes</button>
                 </>
             }
         </div>
