@@ -1,5 +1,5 @@
 import { sendMessage } from "../../modules/ChromeHelper";
-console.log("From the background script");
+console.log("Background script loaded");
 
 /**
  * Detect when the user closes the extension popup, 
