@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "./Components/TextField";
 import NotOnYouTube from "./Components/NotOnYouTube";
 import storage from "../../modules/LocalStorage";
-import { sendMessage } from "../../modules/ChromeHelper";
+import { sendMessage, checkConnection } from "../../modules/ChromeHelper";
 import onPopupLoad from "./useEffect/onPopupLoad";
 import onSubmit from "./useEffect/onSubmit";
 import onTextChange from "./useEffect/onTextChange";
@@ -21,9 +21,10 @@ const Popup = () => {
 	const [textMode, setTextMode] = useState(true);
 	const [window_size, setSize] = useState({});
 	const [isPlaying, setIsPlaying] = useState(false);
+	const [connected, setConnected] = useState(false);
 
 	// Get the tab that the user is currently on, to run once
-	onPopupLoad(setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody)
+	onPopupLoad(setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody, connected, setConnected)
 
 	// On submit button
 	onSubmit(currentURL, md, entryTitle, entryBody, timeStamp, setEntryTitle, setEntryBody);
@@ -34,6 +35,11 @@ const Popup = () => {
 	// Whenever the user switches between the text entry vs annotation view
 	onPageChange(textMode, setSize);
 
+	// Pause the video when popup opens and connectino is affirmed
+	useEffect(() => {
+		if (connected) sendMessage(activeTab, { action: "pause" }, () => {});
+	}, [connected]);
+
 	// Submit annotation entry
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -42,12 +48,23 @@ const Popup = () => {
 		} else sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) });
 	}
 
+	function goToLast() {
+		if (md.mdcontent.length === 0) {
+			sendMessage(activeTab, { action: "alert", message: "You have no notes for this YouTube video" }, () => {});
+		} else {
+			let index = md.mdcontent.length - 1;
+			let lastts = md.mdcontent[index].timeStamp;
+			sendMessage(activeTab, { action: "setTime", time: lastts }, () => {});
+		}
+		window.close();
+	}
+
 	// Ctrl Enter to submit an annotation
 	onKeyCtrl("Enter", () => { sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) }) });
 
 	return (
 		<>
-			{currentURL.includes("www.youtube.com/watch") ?
+			{connected && currentURL.includes("www.youtube.com/watch") ?
 			<div className="App" style={ window_size }>
 				<header className="App-header">
 					{
@@ -78,16 +95,7 @@ const Popup = () => {
 										md.print();
 									}
 								}}>Print</button> */}
-								<button onClick={() => {
-									if (md.mdcontent.length === 0) {
-										sendMessage(activeTab, { action: "alert", message: "You have no notes for this YouTube video" }, () => {});
-									} else {
-										let index = md.mdcontent.length - 1;
-										let lastts = md.mdcontent[index].timeStamp;
-										sendMessage(activeTab, { action: "setTime", time: lastts }, () => {});
-									}
-									window.close();
-								}}>Go To Last</button>
+								<button onClick={ goToLast }>Go To Last</button>
 							</span>
 							<TextField
 								handleSubmit={handleSubmit}
@@ -105,6 +113,7 @@ const Popup = () => {
 
 			:
 
+			// Improve this so that it will handle specific errors
 			<NotOnYouTube />}
 		</>
 	);

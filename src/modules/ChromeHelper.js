@@ -4,6 +4,18 @@ export function getVideoTitle(tabTitle) {
     return tabTitle.split(" - YouTube")[0];
 }
 
+export function checkConnection(tab, set) {
+    chrome.tabs.sendMessage(tab.id, { action: null }, {}, function (res) {
+        if (chrome.runtime.lastError) {
+            // There is a problem with the connection
+            set(false);
+        } else if (res) {
+            // There is a connection
+            set(true);
+        }
+    });
+}
+
 export function sendMessage(tab, message, callback) {
     chrome.tabs.sendMessage(tab.id, message, {}, function (res) {
         if (chrome.runtime.lastError) {

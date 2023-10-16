@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { getVideoTitle, sendMessage } from "../../../modules/ChromeHelper";
+import { checkConnection, getVideoTitle, sendMessage } from "../../../modules/ChromeHelper";
 import storage from "../../../modules/LocalStorage";
 import Markdown from "../../../modules/Markdown";
 
 export default function onPopupLoad(
-	setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody
+	setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody, connected, setConnected
 ) {
 	useEffect(() => {
 		// Obtain the current tab data on popup open
@@ -42,13 +42,8 @@ export default function onPopupLoad(
 					setEntryBody(parsedDataText.body);
 				}
 
-				// Pause the video as the user adds an annotation
-				try {
-					sendMessage(currentTab, { action: "pause" }, () => {});
-				} catch {
-					console.log("Tab not connected");
-					window.close();
-				}
+				// Check if there is connection
+				checkConnection(currentTab, setConnected);
 			}
 		});
 	}, []);
