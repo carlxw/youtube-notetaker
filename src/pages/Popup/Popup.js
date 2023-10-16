@@ -22,9 +22,11 @@ const Popup = () => {
 	const [window_size, setSize] = useState({});
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [connected, setConnected] = useState(false);
+	const [isOnYouTube, setIsOnYouTube] = useState(false);
+	const [error, setError] = useState("");
 
 	// Get the tab that the user is currently on, to run once
-	onPopupLoad(setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody, connected, setConnected)
+	onPopupLoad(setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody, setConnected, setIsOnYouTube, setError);
 
 	// On submit button
 	onSubmit(currentURL, md, entryTitle, entryBody, timeStamp, setEntryTitle, setEntryBody);
@@ -38,6 +40,7 @@ const Popup = () => {
 	// Pause the video when popup opens and connectino is affirmed
 	useEffect(() => {
 		if (connected) sendMessage(activeTab, { action: "pause" }, () => {});
+		else setError("err_not_connected");
 	}, [connected]);
 
 	// Submit annotation entry
@@ -48,6 +51,7 @@ const Popup = () => {
 		} else sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) });
 	}
 
+	// Takes user to where the last annotation was created
 	function goToLast() {
 		if (md.mdcontent.length === 0) {
 			sendMessage(activeTab, { action: "alert", message: "You have no notes for this YouTube video" }, () => {});
@@ -59,12 +63,12 @@ const Popup = () => {
 		window.close();
 	}
 
-	// Ctrl Enter to submit an annotation
+	// Ctrl+Enter to submit an annotation
 	onKeyCtrl("Enter", () => { sendMessage(activeTab, { action: "currentTime" }, (res) => { setTimeStamp(res) }) });
 
 	return (
 		<>
-			{connected && currentURL.includes("www.youtube.com/watch") ?
+			{connected && isOnYouTube ?
 			<div className="App" style={ window_size }>
 				<header className="App-header">
 					{
@@ -114,7 +118,7 @@ const Popup = () => {
 			:
 
 			// Improve this so that it will handle specific errors improve this now!
-			<ErrorMessage />}
+			<ErrorMessage error={ error }/>}
 		</>
 	);
 };

@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { checkConnection, getVideoTitle, sendMessage } from "../../../modules/ChromeHelper";
+import { checkConnection, getVideoTitle } from "../../../modules/ChromeHelper";
 import storage from "../../../modules/LocalStorage";
 import Markdown from "../../../modules/Markdown";
 
 export default function onPopupLoad(
-	setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody, connected, setConnected
+	setActiveTab, setVideoTitle, setCurrentURL, setmd, setEntryTitle, setEntryBody, setConnected, setIsOnYouTube, setError
 ) {
 	useEffect(() => {
 		// Obtain the current tab data on popup open
@@ -17,6 +17,13 @@ export default function onPopupLoad(
 				setActiveTab(currentTab);
 				setVideoTitle(title);
 				setCurrentURL(url);
+
+				// The user is not on a YouTube video
+				if (url.includes("https://www.youtube.com/watch?")) {
+					setIsOnYouTube(true);
+				} else {
+					setError("err_not_on_youtube")
+				}
 
 				// Send message to background script that popup is active
 				chrome.runtime.connect({ name: "popup" });
