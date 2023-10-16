@@ -1,7 +1,8 @@
 import React from "react";
 
 // Implement scuffed rich text editing
-const NotOnYouTube = () => {
+// Implement another way to handle custom errors!
+const ErrorMessage = () => {
     return (
         <div>
             You are not on a YouTube page!
@@ -9,4 +10,4 @@ const NotOnYouTube = () => {
     );
 }
 
-export default NotOnYouTube;
+export default ErrorMessage;

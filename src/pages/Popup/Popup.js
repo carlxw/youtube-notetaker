@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import TextField from "./Components/TextField";
-import NotOnYouTube from "./Components/NotOnYouTube";
 import storage from "../../modules/LocalStorage";
 import { sendMessage, checkConnection } from "../../modules/ChromeHelper";
 import onPopupLoad from "./useEffect/onPopupLoad";
@@ -9,6 +8,7 @@ import onTextChange from "./useEffect/onTextChange";
 import Annotations from "./Components/Annotations";
 import onPageChange from "./useEffect/onPageChange";
 import onKeyCtrl from "./useEffect/onKeyCtrl";
+import ErrorMessage from "./Components/ErrorMessage";
 
 const Popup = () => {
 	const [md, setmd] = useState(null);
@@ -113,8 +113,8 @@ const Popup = () => {
 
 			:
 
-			// Improve this so that it will handle specific errors
-			<NotOnYouTube />}
+			// Improve this so that it will handle specific errors improve this now!
+			<ErrorMessage />}
 		</>
 	);
 };
