@@ -32,3 +32,6 @@
 ## Technologies Used
 * ReactJS
 * [lxieyang's Chrome Extension Boilerplate](https://github.com/lxieyang/chrome-extension-boilerplate-react)
+
+## Demo
+Coming soon...
