@@ -5,11 +5,14 @@
   "background": { "service_worker": "background.bundle.js" },
   "options_page": "options.html",
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": "icon-34.png"
+    "default_popup": "popup.html"
   },
   "icons": {
-    "128": "icon-128.png"
+    "128": "image_128.png",
+    "32": "image_32.png",
+    "48": "image_48.png",
+    "24": "image_24.png",
+    "16": "image_16.png"
   },
   "content_scripts": [
     {
@@ -19,7 +22,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
+      "resources": ["content.styles.css", "image_128.png", "image_32.png"],
       "matches": []
     }
   ],
