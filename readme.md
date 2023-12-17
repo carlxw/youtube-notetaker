@@ -1,6 +1,9 @@
 # YouTube Notetaker
 > A Chrome Extension designed to enhance the video and notetaking experience by allowing one to effortlessly record and export annotations through an effective medium
 
+![Screenshot1](./img/Notetaker_1.png)
+![Screenshot2](./img/Notetaker_2.png)
+
 ## Features
 * Auto-pause and unpause when writing down annotations
 * Pure-JS rich text editor that allows ease of notetaking
